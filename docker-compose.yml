@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  zobot:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file: .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config:ro
+      - ./prompts:/app/prompts:ro
+      - ./knowledge:/app/knowledge:ro
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  redis-data:

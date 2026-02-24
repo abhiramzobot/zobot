@@ -1,0 +1,392 @@
+# ============================================================
+# Dentalkart Policies — Comprehensive from SOP Analysis
+# ============================================================
+
+- id: return-policy
+  title: "Return & Replacement Policy"
+  content: |
+    Dentalkart provides a Return/Replacement scheme for products purchased within 10 days of delivery.
+
+    ELIGIBILITY CRITERIA:
+    • Product must be unused with intact seal
+    • All parts, accessories, warranty cards, and manuals must be included
+    • Product packaging must not be damaged
+    • Return request must include images/video of the issue
+
+    KEY RULES:
+    • Return window: 10 days from delivery date
+    • Damage/Wrong/Missing reporting: Within 48 hours of delivery (after 48 hours, claims may not be accepted)
+    • Items below ₹150: Refund only, no return/replacement
+    • Non-returnable items: Products used directly on patients (tooth cream, mousse, MRC/ortho trainers), opened consumables
+
+    FEES:
+    • Partial return: ₹95 fee if remaining order value < ₹2,500
+    • Full order return: ₹95 fee if original order value < ₹2,500
+    • Sending wrong/extra products back: Customer bears logistics cost
+
+    RESOLUTION PRIORITY:
+    1. Replacement (preferred, within 10 working days)
+    2. Coupon (if product out of stock)
+    3. Refund (5-7 working days after approval)
+
+    TECHNICAL ASSISTANCE:
+    • We may troubleshoot via online tools or phone calls
+    • For repairable issues, may ask to use a local technician (Dentalkart reimburses the fee)
+    • If customer declines local technician, reverse pickup is arranged
+
+    RETURN STEPS (Customer Self-Service):
+    1. Log into Dentalkart account
+    2. Go to "My Orders"
+    3. Click Track button for the order
+    4. Click "Return" button
+    5. Select product, quantity, reason, and action (Refund/Replacement)
+    6. Attach images/video of the product
+    7. Describe the concern briefly
+    8. Click Submit
+    Link: dentalkart.com/account/my-order/v2
+  category: returns
+
+- id: missing-item-policy
+  title: "Missing Item Resolution Policy"
+  content: |
+    For missing items valued below ₹5,000:
+
+    ELIGIBILITY: Must be reported within 10 days of delivery.
+
+    RESOLUTION OPTIONS (in priority order):
+    1. Replacement/Redispatch — Missing item reshipped within 1-2 business days
+    2. Coupon — Same value coupon if item out of stock (shared within 24 hours)
+    3. Refund — Processed within 5-7 working days
+
+    REQUIRED FROM CUSTOMER:
+    • Order ID
+    • Images of received parcel and invoice (if available)
+    • Clear description of the issue
+    Note: If customer doesn't share images, proceed based on invoice copy.
+  category: returns
+
+- id: cancellation-policy
+  title: "Order Cancellation Policy"
+  content: |
+    PRE-DISPATCH FULL CANCELLATION:
+    • Allowed only before order status = Packed
+    • If Packed: Check if manifest number is generated
+      - Manifest generated → Cancellation NOT possible
+      - Manifest NOT generated → Eligible, put on Hold
+    • COD orders: Customer can cancel from app (Profile → My Orders → Expand → Cancel → Reason → Submit)
+    • Prepaid orders: Agent marks On Hold in system and escalates
+
+    AFTER PICK COMPLETE STAGE:
+    • If Packed + Manifest generated → Cancellation NOT possible
+    • Customer advised to refuse delivery at doorstep, then return
+
+    PRE-DISPATCH PARTIAL CANCELLATION:
+    • Allowed only before Packed for specific items
+    • Beyond Pick Complete → Not possible, customer must accept and return
+
+    CANCELLATION FLOW:
+    1. Ask customer for cancellation reason
+    2. Try to retain if possible
+    3. If customer insists → Mark On Hold → Escalate to In-House Escalation Team
+    4. Refund TAT: 5-7 working days
+
+    RETENTION APPROACH:
+    • Share current order status and expected delivery
+    • Highlight any discounts/offers on the order
+    • Only proceed with cancellation if customer insists
+  category: orders
+
+- id: refund-policy
+  title: "Refund Policy"
+  content: |
+    REFUND TIMELINES:
+    • After return approval: 5-7 working days for processing
+    • Bank refund: Additional 3-5 business days to reflect
+    • Store credit: Applied instantly
+    • Failed payment refund: 5-7 working days
+
+    REFUND MODES:
+    • Original payment method (bank refund)
+    • Dentalkart store credit
+    • UPI
+
+    REFUND FOR CANCELLATION:
+    • Prepaid orders: Refund to original payment method within 5-7 working days
+    • COD orders: No refund needed (payment not collected)
+  category: refunds
+
+- id: shipping-policy
+  title: "Shipping & Delivery Policy"
+  content: |
+    • Dentalkart ships across India via trusted logistics partners
+    • Primary courier partners: Delhivery, Blue Dart, Ecom Express, Xpressbees, Shadowfax, DTDC
+    • Standard delivery: 3-7 business days depending on location
+    • Free shipping available on eligible orders
+    • Tracking available for all shipped orders
+
+    EDD (Estimated Delivery Date):
+    • EDD is determined by the system and is the official timeline
+    • If EDD has NOT been breached: Share tracking details and ask customer to wait
+    • If EDD IS breached: Escalate to logistics team
+
+    DELIVERY ISSUES:
+    • If outer box is damaged/seal tampered: Customer should refuse delivery and report immediately
+    • Delivery partner cannot be changed (assigned automatically based on area)
+    • If delivery agent asks customer to collect from centre: Escalate to logistics
+    • Extra charges by delivery agent: Escalate to logistics (24 hour TAT)
+  category: shipping
+
+- id: order-modification-policy
+  title: "Order Modification Policy"
+  content: |
+    ADDRESS/CONTACT CHANGE:
+    • Allowed only before Packed status
+    • If Packed: Check manifest number
+      - Manifest generated → Changes NOT possible
+      - Manifest NOT generated → Mark On Hold, escalate to In-House Escalation Team
+    • TAT: 24 hours for update
+
+    PRODUCT REPLACEMENT IN ORDER:
+    • Allowed only if status = Allocated or Confirmed
+    • New products cannot be added to existing orders
+    • Beyond Allocated/Confirmed → Customer must place fresh order
+    • Price differences (prepaid): Payment link sent for higher price; refund initiated for lower price
+    • COD orders: Customer pays updated amount at delivery
+
+    GST DETAILS CHANGE:
+    • Same rules as address change (before Packed only)
+  category: orders
+
+- id: reverse-pickup-policy
+  title: "Reverse Pickup (RVP) Policy"
+  content: |
+    • Reverse pickup must be attempted within 48 hours of return approval
+    • If pickup not done within 48 hours: Escalate to Logistics Desk (24-48 hour TAT)
+    • Post pickup: Product reaches warehouse within 72 hours typically
+    • If product hasn't reached warehouse after 72 hours: Escalate to Logistics Desk
+
+    IMPORTANT: Customers should NOT click "cancel pickup" OTPs from courier companies.
+  category: returns
+
+- id: pod-policy
+  title: "Proof of Delivery (POD) Request Policy"
+  content: |
+    When customer reports non-receipt but system shows 'Delivered':
+    • Applies to PREPAID orders only
+    • POD request raised with Logistics Desk
+    • TAT: 5-7 working days for investigation
+
+    For COD orders showing delivered but not received:
+    • Apologize and offer to place a fresh order or escalate to re-order desk
+  category: delivery
+
+- id: warranty-policy
+  title: "Warranty & Service Policy"
+  content: |
+    • Warranty coverage varies by product and manufacturer
+    • Most dental equipment: 1-2 years manufacturer warranty
+    • Warranty claims require: Order details, proof of purchase, description of issue, photos/video
+    • Warranty issues are escalated to Product Specialist team
+    • TAT: 24-48 hours for Product Specialist team to contact customer
+    • For repairable items: RVP (Reverse Pickup) arranged for repair/replacement
+    • Out-of-warranty repairs: Cost estimate provided before proceeding
+  category: warranty
+
+- id: bulk-order-policy
+  title: "Bulk Order Policy"
+  content: |
+    ELIGIBILITY: Minimum order value of ₹10,000 (single or multiple products)
+    NOT ELIGIBLE: Single product below ₹10,000, regular pricing negotiations
+
+    PROCESS:
+    1. Customer fills Bulk Quote Form: https://forms.dentalkart.com/Dentalkart/form/BulkQuoteRequest1/formperma/1VYseSEODDapWtWJulHbHhLisjzp0HmvX7rWxGLvvq8
+    2. Sales Team contacts within 2 hours of form submission
+    3. Form requires: Name, Phone, Email, Address, Product link(s), Quantity, Expected delivery date
+    4. Agent can fill form on customer's behalf if requested
+  category: pricing
+
+- id: callback-policy
+  title: "Callback Policy"
+  content: |
+    • Callback requests cannot be denied in any situation
+    • Callback must be completed within customer's preferred timeline
+    • If SLA breached: Escalate to Quality Team
+    • Agent sends acknowledgment with callback details and TAT
+    • Helpline number: 7289999456
+  category: general
+
+- id: cod-policy
+  title: "Cash on Delivery Policy"
+  content: |
+    • COD available for eligible orders and pin codes
+    • COD availability shown at checkout
+    • Some high-value items may require prepayment
+    • COD orders have same delivery timeline as prepaid
+    • COD cancellation: Customer can cancel directly from app before Packed
+  category: payment
+
+- id: privacy-policy
+  title: "Privacy Policy"
+  content: |
+    Dentalkart is committed to protecting customer privacy. We collect only necessary data to process orders and provide service. Customer information is never shared with third parties for marketing. All payment data is processed through secure, PCI-compliant gateways.
+  category: legal
+
+- id: non-returnable-items
+  title: "Non-Returnable Items Policy"
+  content: |
+    Products that CANNOT be returned:
+    • Products used directly on patients (tooth cream, mousse, MRC/ortho trainers, etc.)
+    • Opened consumables with broken seal
+    • Any product where seal has been tampered
+
+    EXCEPTIONS:
+    If a non-returnable product is received damaged, incorrect, or defective:
+    • Cannot be initiated by customer or agent via normal process
+    • Must be escalated to In-House Escalation Team with: Order ID, product name, quantity, reason, images, and video
+    • In-House team reviews for exceptional approval
+  category: returns
+
+- id: customer-not-responding-policy
+  title: "Customer Not Responding Policy"
+  content: |
+    When a customer stops responding during an active chat session:
+
+    PROTOCOL:
+    1. First reminder after 15 minutes of inactivity:
+       "Are you still there? I'm here to help whenever you're ready."
+    2. Second reminder after another 15 minutes (30 min total):
+       "I haven't heard back from you. If you need more time, feel free to reach out again anytime."
+    3. Close chat after another 15 minutes (45 min total):
+       "Since I haven't heard back, I'll close this chat for now. Your issue has been noted and a ticket has been created. Feel free to reach out anytime — we'll pick up where we left off!"
+
+    RULES:
+    • Total window: 45 minutes from last customer message
+    • Reminders: 2 messages before closure
+    • State on close: RESOLVED with endedBy = 'system'
+    • Ticket must capture all context discussed so far
+    • Dentists are busy with patients — premature closure is a known anti-pattern. Always give adequate wait time.
+  category: general
+
+- id: customer-classification-policy
+  title: "Customer Classification Policy"
+  content: |
+    Customers are classified into 3 tiers based on order history and return behavior:
+
+    LOYAL CUSTOMER:
+    • Criteria: 3+ successfully delivered orders, no history of return abuse
+    • Handling: Approve returns more liberally, prioritize replacement, fast-track escalations
+    • Tone: Extra appreciation — acknowledge their loyalty
+
+    REGULAR CUSTOMER:
+    • Criteria: 1-2 previous orders, standard return behavior
+    • Handling: Follow standard SOP for all processes
+    • Tone: Professional and helpful
+
+    HIGH-RISK CUSTOMER:
+    • Criteria: History of frequent returns, suspicious return patterns, or previously flagged by Returns Team
+    • Handling: Do NOT approve returns directly — escalate to In-House Escalation Team for manual review
+    • Tone: Professional and neutral — NEVER reveal the classification to the customer
+    • Important: Customer should NOT know they are flagged as high-risk
+  category: general
+
+- id: color-variant-return-policy
+  title: "Color/Variant Return Policy"
+  content: |
+    When a customer receives the wrong color, shade, or variant:
+
+    RULES:
+    • Color/variant mismatch is a VALID return reason — always approve
+    • "Any available color" is NOT acceptable — customer's specific preference must be fulfilled
+    • Do NOT substitute with a different color without explicit customer consent
+
+    PROCESS:
+    1. Approve the return for wrong color/variant
+    2. Note exact color requested vs received in the ticket
+    3. Check if exact color/variant is available for replacement:
+       - Available → Process replacement with correct color
+       - Unavailable → Offer choice: wait for restock OR full refund
+    4. Never force a substitute color on the customer
+  category: returns
+
+- id: replacement-order-policy
+  title: "Replacement Order (RP-) Policy"
+  content: |
+    Orders with the RP- prefix are Replacement Orders:
+
+    IDENTIFICATION:
+    • Order numbers starting with "RP-" indicate a replacement for a previous return
+    • RP- orders are linked to an original order (the one that was returned)
+
+    HANDLING:
+    • Same delivery and service SLAs as regular orders
+    • Tracked separately with their own AWB and tracking
+    • When customer mentions an RP- order, always check the ORIGINAL order for context
+    • If an RP- order also has issues (e.g., replacement arrived damaged), escalate to In-House Team with FULL history of both original and replacement orders
+
+    CUSTOMER COMMUNICATION:
+    • Explain RP- simply: "This is your replacement order for [original order]"
+    • Provide tracking for the RP- order like any other shipment
+  category: orders
+
+- id: membership-policy
+  title: "Dentalkart Plus Membership Policy"
+  content: |
+    Dentalkart Plus Membership is a paid subscription program for dental professionals.
+
+    PLANS:
+    • Plan I — 6 Months: ₹499 (₹83.2/month)
+    • Plan II — 1 Year: ₹799 (₹66.6/month) — most economical
+
+    BENEFITS:
+    1. Free Delivery on orders above ₹499 (₹10 COD handling fee applies)
+    2. Double Reward Value: 1 Coin = ₹1 (vs ₹0.50 for non-members)
+    3. Priority Shipping: Expedited processing for faster delivery
+    4. Education Pass Discount: Exclusive discounts on dental seminars and training
+
+    ACTIVATION:
+    • Purchase via dentalkart.com/membership or Dentalkart app
+    • Benefits activate immediately after payment
+    • Validity starts from date of purchase
+
+    KEY RULES:
+    • Non-refundable — membership fee cannot be refunded once paid
+    • One membership per account only — cannot be shared or transferred
+    • No auto-renewal — customer chooses to renew when plan expires
+    • Benefits are NOT retroactive — only apply to orders placed after membership activation
+    • India deliveries only — international orders not covered
+
+    REWARD COIN CONVERSION ON MEMBERSHIP PURCHASE:
+    • When a customer buys Plus Membership, existing reward coins are halved in quantity
+    • This is because coin value doubles (₹0.50 → ₹1.00 per coin)
+    • Total monetary value remains the same: e.g., 200 coins × ₹0.50 = ₹100 → 100 coins × ₹1 = ₹100
+    • Agent must explain this clearly if customer asks about "missing" coins after membership purchase
+
+    SAVINGS PROJECTION:
+    • Assumption: 1 order/month of ₹5,000 with yearly plan
+    • Monthly reward benefit: ~₹125
+    • Monthly free delivery saving: ~₹100
+    • Annual savings: ~₹2,700 vs ₹799 membership cost = net saving of ~₹1,900
+
+    MEMBERSHIP URL: dentalkart.com/membership
+  category: membership
+
+- id: return-decision-matrix
+  title: "Return Decision Matrix"
+  content: |
+    Apply these 6 rules in order to determine return outcome:
+
+    RULE 1: Delivered + within 10 days + unused with intact seal → APPROVE
+    RULE 2: Damaged/Wrong/Missing + within 48 hours of delivery → APPROVE (fast-track, priority processing)
+    RULE 3: Item value < ₹150 → REFUND ONLY (no physical return required)
+    RULE 4: Used on patient (consumables, MRC trainers, tooth cream/mousse) → REJECT (non-returnable)
+    RULE 5: Outside 10-day window → ESCALATE to Returns Team (exception approval required)
+    RULE 6: Customer classification = High-Risk → ESCALATE to In-House Team (manual review required)
+
+    PRIORITY: Rule 4 (non-returnable) and Rule 6 (High-Risk) override Rules 1 and 2.
+    When escalating, always use the Crisp Return Summary format for ticket updates.
+
+    RESOLUTION PRIORITY (when approved):
+    1. Replacement (preferred)
+    2. Store Credit
+    3. Refund (5-7 working days)
+  category: returns

@@ -1,0 +1,318 @@
+{
+  "tenantId": "default",
+  "enabledTools": [
+    "lookup_customer_orders",
+    "track_shipment",
+    "get_shipment_details",
+    "get_ship_details",
+    "check_return_status",
+    "search_products",
+    "create_ticket_note",
+    "handoff_to_human",
+    "cancel_order",
+    "update_address",
+    "change_payment_method",
+    "generate_payment_link",
+    "add_to_cart",
+    "view_cart",
+    "remove_from_cart",
+    "start_ar_demo",
+    "end_ar_session",
+    "apply_coupon",
+    "check_coupon",
+    "initiate_refund",
+    "recommend_products",
+    "analyze_image",
+    "collect_product_review",
+    "get_bulk_pricing",
+    "request_quote"
+  ],
+  "channelPolicies": {
+    "whatsapp": {
+      "enabledTools": [
+        "lookup_customer_orders",
+        "track_shipment",
+        "get_shipment_details",
+        "get_ship_details",
+        "check_return_status",
+        "search_products",
+        "create_ticket_note",
+        "handoff_to_human",
+        "cancel_order",
+        "update_address",
+        "change_payment_method",
+        "generate_payment_link",
+        "add_to_cart",
+        "view_cart",
+        "remove_from_cart",
+        "start_ar_demo",
+        "end_ar_session",
+        "apply_coupon",
+        "check_coupon",
+        "initiate_refund",
+        "recommend_products",
+        "analyze_image",
+        "collect_product_review",
+        "get_bulk_pricing",
+        "request_quote"
+      ],
+      "maxTurnsBeforeEscalation": 12,
+      "streamingEnabled": false,
+      "supportHours": {
+        "start": "09:00",
+        "end": "21:00",
+        "timezone": "Asia/Kolkata",
+        "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      }
+    },
+    "business_chat": {
+      "enabledTools": [
+        "lookup_customer_orders",
+        "track_shipment",
+        "get_shipment_details",
+        "get_ship_details",
+        "check_return_status",
+        "search_products",
+        "create_ticket_note",
+        "handoff_to_human",
+        "cancel_order",
+        "update_address",
+        "change_payment_method",
+        "generate_payment_link",
+        "add_to_cart",
+        "view_cart",
+        "remove_from_cart",
+        "start_ar_demo",
+        "end_ar_session",
+        "apply_coupon",
+        "check_coupon",
+        "initiate_refund",
+        "recommend_products",
+        "analyze_image",
+        "collect_product_review",
+        "get_bulk_pricing",
+        "request_quote"
+      ],
+      "maxTurnsBeforeEscalation": 12,
+      "streamingEnabled": false,
+      "supportHours": {
+        "start": "09:00",
+        "end": "21:00",
+        "timezone": "Asia/Kolkata",
+        "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      }
+    },
+    "web": {
+      "enabledTools": [
+        "lookup_customer_orders",
+        "track_shipment",
+        "get_shipment_details",
+        "get_ship_details",
+        "check_return_status",
+        "search_products",
+        "create_ticket_note",
+        "handoff_to_human",
+        "cancel_order",
+        "update_address",
+        "change_payment_method",
+        "generate_payment_link",
+        "add_to_cart",
+        "view_cart",
+        "remove_from_cart",
+        "start_ar_demo",
+        "end_ar_session",
+        "apply_coupon",
+        "check_coupon",
+        "initiate_refund",
+        "recommend_products",
+        "analyze_image",
+        "collect_product_review",
+        "get_bulk_pricing",
+        "request_quote"
+      ],
+      "maxTurnsBeforeEscalation": 15,
+      "streamingEnabled": true,
+      "supportHours": {
+        "start": "09:00",
+        "end": "21:00",
+        "timezone": "Asia/Kolkata",
+        "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      }
+    }
+  },
+  "escalationThresholds": {
+    "maxClarifications": 2,
+    "frustrationKeywords": [
+      "frustrated",
+      "angry",
+      "useless",
+      "terrible",
+      "worst",
+      "speak to human",
+      "real person",
+      "manager",
+      "supervisor",
+      "waste of time",
+      "pathetic",
+      "horrible service",
+      "consumer court",
+      "legal action",
+      "very poor",
+      "fed up",
+      "disgusting",
+      "scam",
+      "fraud",
+      "cheat",
+      "loot",
+      "ridiculous",
+      "unacceptable",
+      "complaint",
+      "bahut bura",
+      "bekaar",
+      "ghatiya",
+      "dhokha",
+      "loot rahe ho",
+      "paisa wapas do",
+      "consumer forum",
+      "bohot bura experience",
+      "tang aa gaye",
+      "thak gaya",
+      "koi kaam nahi hota",
+      "koi sunne wala nahi",
+      "barbaad",
+      "bekar service",
+      "worst experience"
+    ],
+    "escalationIntents": [
+      "request_human",
+      "legal_question",
+      "contract_negotiation",
+      "discount_request",
+      "complaint",
+      "callback_request",
+      "supervisor_request"
+    ],
+    "sentimentEscalationThreshold": -0.7,
+    "urgencyAutoEscalate": ["critical"],
+    "riskFlagAutoEscalate": ["legal_threat", "social_media_threat", "policy_exception_requested", "repeat_complaint"]
+  },
+  "escalationDesks": {
+    "operations": {
+      "name": "Operations Desk",
+      "handles": ["urgent_dispatch", "partial_dispatch", "order_replacement", "cod_conversion", "reorder"]
+    },
+    "purchase": {
+      "name": "Purchase Desk",
+      "handles": ["out_of_stock_confirmed", "product_availability"]
+    },
+    "logistics": {
+      "name": "Logistics Desk",
+      "handles": ["edd_breached", "reverse_pickup", "delivery_complaint", "extra_payment", "pod_request", "rto_issue"]
+    },
+    "payment": {
+      "name": "Payment Desk",
+      "handles": ["payment_link", "refund_processing", "failed_payment", "refund_mismatch"]
+    },
+    "in_house": {
+      "name": "In-House Escalation Team",
+      "handles": ["cancellation", "address_change", "non_returnable_exception", "complex_cases"]
+    },
+    "product_specialist": {
+      "name": "Product Specialist Team",
+      "handles": ["warranty_claim", "product_troubleshoot", "repair_assessment", "rvp_arrangement"]
+    },
+    "tech": {
+      "name": "Tech Team",
+      "handles": ["app_crash", "website_issue", "functional_issue"]
+    },
+    "returns": {
+      "name": "Returns Team",
+      "handles": ["late_return_exception", "return_rejection_dispute"]
+    },
+    "sales": {
+      "name": "Sales Team",
+      "handles": ["bulk_quote", "institutional_pricing"]
+    },
+    "quality": {
+      "name": "Quality Team",
+      "handles": ["callback_sla_breach", "service_quality"]
+    }
+  },
+  "ticketCreationPolicy": {
+    "autoCreateOnNew": true,
+    "autoSummarizeOnUpdate": true,
+    "tagPrefix": "dentalkart"
+  },
+  "promptVersion": "v2",
+  "supportInfo": {
+    "helplineNumber": "7289999456",
+    "supportEmail": "support@dentalkart.com",
+    "returnUrl": "https://www.dentalkart.com/account/my-order/v2",
+    "bulkQuoteFormUrl": "https://forms.dentalkart.com/Dentalkart/form/BulkQuoteRequest1/formperma/1VYseSEODDapWtWJulHbHhLisjzp0HmvX7rWxGLvvq8",
+    "trackingDomain": "dentalkart.clickpost.ai"
+  },
+  "policyRules": {
+    "returnWindowDays": 10,
+    "damageReportWindowHours": 48,
+    "reversePickupTatHours": 48,
+    "refundTatWorkingDays": "5-7",
+    "bulkMinOrderValue": 10000,
+    "partialReturnFee": 95,
+    "partialReturnFeeThreshold": 2500,
+    "noReturnItemMaxValue": 150,
+    "salesCallbackTatHours": 2
+  },
+  "featureFlags": {
+    "tool.lookup_customer_orders": true,
+    "tool.track_shipment": true,
+    "tool.get_shipment_details": true,
+    "tool.get_ship_details": true,
+    "tool.check_return_status": true,
+    "tool.search_products": true,
+    "tool.create_ticket_note": true,
+    "tool.handoff_to_human": true,
+    "tool.cancel_order": true,
+    "tool.update_address": true,
+    "tool.change_payment_method": true,
+    "tool.generate_payment_link": true,
+    "tool.add_to_cart": true,
+    "tool.view_cart": true,
+    "tool.remove_from_cart": true,
+    "tool.start_ar_demo": true,
+    "tool.end_ar_session": true,
+    "tool.apply_coupon": true,
+    "tool.check_coupon": true,
+    "tool.initiate_refund": true,
+    "tool.recommend_products": true,
+    "tool.analyze_image": true,
+    "tool.collect_product_review": true,
+    "tool.get_bulk_pricing": true,
+    "tool.request_quote": true,
+    "tool.create_lead": false,
+    "tool.update_lead": false,
+    "tool.schedule_meeting": false,
+    "tool.get_product_info": false,
+    "rag.enabled": false,
+    "knowledge.troubleshooting": true,
+    "knowledge.escalation_matrix": true,
+    "language.hindi_support": true,
+    "feature.after_hours_capture": true,
+    "feature.product_troubleshoot": true,
+    "feature.cancellation_eligibility": true,
+    "feature.return_eligibility": true,
+    "feature.customer_classification": true,
+    "feature.return_rate_monitoring": true,
+    "feature.failed_delivery_handling": true,
+    "feature.color_variant_returns": true,
+    "feature.replacement_order_tracking": true,
+    "feature.customer_not_responding": true,
+    "feature.wrong_return_reason_correction": true,
+    "feature.membership_handling": true,
+    "feature.membership_upsell": true
+  },
+  "customerNotRespondingPolicy": {
+    "timeoutMinutes": 15,
+    "maxReminders": 2,
+    "autoCloseAfterMinutes": 45
+  }
+}

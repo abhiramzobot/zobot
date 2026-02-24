@@ -1,0 +1,203 @@
+# ============================================================
+# Dentalkart Product Categories — Expanded from SOP Analysis
+# ============================================================
+
+- id: dental-chairs
+  name: "Dental Chairs"
+  description: "Professional dental chairs and units from leading brands. Available in hydraulic, electric, and portable configurations for clinics of all sizes."
+  features:
+    - "Hydraulic & electric models"
+    - "Integrated LED light options"
+    - "Ergonomic patient positioning"
+    - "Multiple upholstery color options"
+    - "Warranty included"
+  pricing: "Starting from ₹45,000 — varies by brand and model"
+  category: equipment
+
+- id: dental-handpieces
+  name: "Dental Handpieces"
+  description: "High-speed airotors, contra-angle handpieces, and straight handpieces from top manufacturers. Includes 2-spray and 3/4-spray models."
+  subcategories:
+    - name: "Airotors (High-Speed)"
+      description: "High-speed handpieces (300,000+ RPM) for cutting, grinding, and tooth preparation"
+      brands: ["Waldent Tesla", "Endoking Myrotor", "Apple", "Being", "COXO"]
+      troubleshooting_ref: "airotor"
+    - name: "Contra-Angle Handpieces"
+      description: "Low-speed handpieces with angular head, accepts 2.35mm CA burs"
+      troubleshooting_ref: "contra-angle-handpiece"
+    - name: "Straight Handpieces"
+      description: "Low-speed direct handpieces for extraoral and lab use, accepts 2.35mm straight burs"
+      brands: ["Waldent W-134"]
+      troubleshooting_ref: "straight-handpiece"
+  features:
+    - "High-speed (up to 400,000 RPM)"
+    - "Low-speed options available"
+    - "LED illumination models"
+    - "Autoclavable"
+    - "Multiple brands: NSK, Kavo, W&H, Waldent, Endoking"
+  pricing: "Starting from ₹2,500 — varies by type and brand"
+  category: equipment
+
+- id: micromotors
+  name: "Micromotors"
+  description: "Electrically powered dental/lab rotary devices for cutting, polishing, and clinical procedures."
+  brands:
+    - "Marathon M4 (Lab) Micromotor"
+    - "Waldent Advanced Clinical Micromotor Kit"
+    - "Waldent Professional Micromotor Kit"
+    - "Marathon M3 Complete Set"
+    - "API Dental Micromotor Complete Set"
+  troubleshooting_ref: "micromotor"
+  features:
+    - "Control box with speed adjustment"
+    - "Hand and foot pedal modes"
+    - "Clinical and laboratory variants"
+    - "Compatible with various handpieces"
+  pricing: "Starting from ₹3,500 — varies by brand and model"
+  category: equipment
+
+- id: endodontic-instruments
+  name: "Endodontic Instruments"
+  description: "Rotary files, hand files, apex locators, obturation systems, endomotors, and gutta percha cutters."
+  subcategories:
+    - name: "Endomotors"
+      description: "Cordless LED endomotors for controlled root canal preparation"
+      brands: ["EndoExcellence Canal Commander"]
+      troubleshooting_ref: "endomotor"
+    - name: "Gutta Percha Cutters"
+      description: "Cordless heated cutters for gutta percha trimming and obturation"
+      brands: ["EndoKing"]
+      troubleshooting_ref: "gutta-percha-cutter"
+    - name: "Rotary Files"
+      description: "NiTi rotary file systems for canal preparation"
+    - name: "Hand Files"
+      description: "Stainless steel and NiTi hand files"
+  features:
+    - "NiTi rotary file systems"
+    - "Cordless endomotors with LED"
+    - "Auto-reverse and auto-stop safety"
+    - "Obturation systems"
+  pricing: "Rotary files from ₹800/pack — Endomotors from ₹8,000"
+  category: endodontics
+
+- id: sterilization
+  name: "Sterilization Products"
+  description: "Autoclaves, UV chambers, glass bead sterilizers, sterilization pouches, indicators, and disinfectants."
+  subcategories:
+    - name: "Autoclaves"
+      description: "Pressurized steam sterilizers (121-134°C) for complete instrument sterilization"
+      brands: ["Dentis Insta-clave 14L", "Life Stericlave 12L", "Life Stericlave 22L"]
+      troubleshooting_ref: "autoclave"
+    - name: "UV Chambers"
+      description: "UV-C disinfection cabinets for instrument storage and disinfection (NOT a replacement for autoclave)"
+      brands: ["Dentis UV Chamber Insta UV"]
+      troubleshooting_ref: "uv-chamber"
+    - name: "Glass Bead Sterilizers"
+      description: "Rapid dry heat sterilizers for small instruments (files, burs, tips)"
+      brands: ["Waldent Digital Glass Bead Sterilizer"]
+      troubleshooting_ref: "glass-bead-sterilizer"
+  features:
+    - "B-class and N-class autoclaves"
+    - "UV disinfection chambers"
+    - "Digital glass bead sterilizers"
+    - "Sterilization pouches and indicators"
+  pricing: "Autoclaves from ₹25,000 — UV chambers from ₹5,000"
+  category: infection-control
+
+- id: dental-imaging
+  name: "Dental Imaging"
+  description: "Digital RVG sensors, intraoral cameras, X-ray units, and dental photography equipment."
+  subcategories:
+    - name: "RVG Sensors"
+      description: "Digital radiovisiograph sensors for intraoral X-ray imaging"
+      troubleshooting_ref: "rvg"
+    - name: "Intraoral Cameras"
+      description: "USB/wireless cameras for intraoral visualization and patient education"
+      troubleshooting_ref: "intraoral-camera"
+    - name: "X-Ray Machines"
+      description: "Portable and wall-mounted dental X-ray units"
+      troubleshooting_ref: "xray-machine"
+  features:
+    - "Digital RVG sensors"
+    - "Intraoral cameras"
+    - "Portable X-ray units"
+    - "CBCT compatible"
+  pricing: "RVG sensors from ₹35,000 — X-ray units from ₹45,000"
+  category: imaging
+
+- id: periodontic-instruments
+  name: "Periodontic Instruments"
+  description: "Ultrasonic scalers, scaler tips, and periodontal maintenance instruments."
+  subcategories:
+    - name: "Ultrasonic Scalers"
+      description: "Powered scaling devices for calculus removal (DTE/Satelec and EMS/UDS types)"
+    - name: "Scaler Tips"
+      description: "Removable ultrasonic tips (check compatibility! DTE vs EMS types are NOT interchangeable)"
+      troubleshooting_ref: "scaler-tips"
+  features:
+    - "DTE/Satelec compatible (GD, PD, ED series)"
+    - "EMS/UDS compatible (G, E series)"
+    - "Multiple tip types for different procedures"
+  pricing: "Scaler tips from ₹300/piece — Ultrasonic scalers from ₹8,000"
+  category: periodontics
+
+- id: implantology
+  name: "Implantology"
+  description: "Dental implant systems, implant stability testers, and related instruments."
+  subcategories:
+    - name: "Implant Stability Testers"
+      description: "Resonance frequency analysis devices for measuring implant stability (ISQ)"
+      brands: ["DentalPlant Implant Stability Tester"]
+      troubleshooting_ref: "implant-stability-tester"
+  features:
+    - "Objective ISQ measurement"
+    - "SmartPeg technology"
+    - "Digital display"
+  pricing: "Implant stability testers from ₹25,000"
+  category: implantology
+
+- id: composite-materials
+  name: "Composite & Restorative Materials"
+  description: "Dental composites, flowable composites, bonding agents, and restorative materials from 3M, GC, Ivoclar, Kerr, and more."
+  features:
+    - "Nano-hybrid, micro-hybrid, flowable"
+    - "Multiple shade systems"
+    - "Light-cure and dual-cure options"
+    - "High strength and polishability"
+  pricing: "Starting from ₹500 per syringe"
+  category: materials
+
+- id: orthodontic-supplies
+  name: "Orthodontic Supplies"
+  description: "Brackets, wires, bands, elastics, adhesives, and complete orthodontic kits for all treatment approaches."
+  features:
+    - "Metal and ceramic brackets"
+    - "NiTi and SS wires"
+    - "Self-ligating options"
+    - "Molar bands and tubes"
+  pricing: "Varies by product — brackets from ₹150/piece"
+  category: orthodontics
+
+- id: dental-cements
+  name: "Dental Cements"
+  description: "Glass ionomer cements, zinc phosphate, resin cements, and temporary cements for various dental procedures."
+  features:
+    - "GIC for fillings and luting"
+    - "Resin cements for veneers/crowns"
+    - "Temporary cements"
+    - "Self-adhesive options"
+  pricing: "Starting from ₹300 per pack"
+  category: materials
+
+- id: accessories
+  name: "Dental Accessories"
+  description: "Butane gas torches, LED curing lights, dental loupes, and other clinical accessories."
+  subcategories:
+    - name: "Butane Gas Torches"
+      description: "Portable refillable flame tools for precision heating"
+      brands: ["Jinguang"]
+      troubleshooting_ref: "butane-gas-torch"
+    - name: "LED Curing Lights"
+      description: "Wireless LED lights for composite curing"
+  pricing: "Varies by product"
+  category: accessories

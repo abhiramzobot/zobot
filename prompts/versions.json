@@ -1,0 +1,13 @@
+{
+  "default": "v1",
+  "versions": {
+    "v1": {
+      "system": "system.md",
+      "developer": "developer.md",
+      "brandTone": "brand_tone.md",
+      "approved": true,
+      "approvedBy": "admin@company.com",
+      "approvedAt": "2025-01-15T00:00:00Z"
+    }
+  }
+}

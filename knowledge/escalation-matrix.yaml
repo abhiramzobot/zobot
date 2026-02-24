@@ -1,0 +1,220 @@
+# ============================================================
+# Dentalkart Escalation Matrix — Comprehensive from SOP
+# Maps issues to specific internal teams with TATs
+# ============================================================
+
+# --- OPERATIONS DESK ---
+- desk: "Operations Desk"
+  alias: "operations"
+  remarkType: "escalation"
+  handles:
+    - "Order not dispatched / ship-by date breached"
+    - "Urgent dispatch requests"
+    - "Partial dispatch requests"
+    - "Product replacement in order (after payment confirmation)"
+    - "Re-order / fresh order processing"
+    - "COD conversion requests"
+  tat: "24-48 hours"
+  escalation_context_required:
+    - "Order ID"
+    - "Current order status"
+    - "Ship-by date"
+    - "Specific request details"
+
+# --- PURCHASE DESK ---
+- desk: "Purchase Desk"
+  alias: "purchase"
+  remarkType: "escalation"
+  handles:
+    - "Items in 'Confirmed' status (out of stock)"
+    - "Product availability inquiries for pending orders"
+    - "Stock timeline requests"
+  tat: "24 hours for update"
+  escalation_context_required:
+    - "Order ID"
+    - "Product name/SKU"
+    - "Current order status"
+
+# --- LOGISTICS DESK ---
+- desk: "Logistics Desk"
+  alias: "logistics"
+  remarkType: "escalation"
+  handles:
+    - "EDD breached / delivery delayed (shipped orders)"
+    - "Reverse pickup not done (>48 hours)"
+    - "Return product not reached warehouse (>72 hours)"
+    - "Delivery agent complaints"
+    - "Extra payment charged by delivery boy"
+    - "POD (Proof of Delivery) requests"
+    - "Failed delivery / RTO issues"
+    - "Delivery address area issues"
+    - "Wrong address correction for re-delivery"
+    - "Multiple failed delivery attempts"
+  tat: "24-48 hours"
+  escalation_context_required:
+    - "Order ID"
+    - "AWB number"
+    - "Courier partner"
+    - "Current tracking status"
+    - "Issue description"
+    - "Failed delivery reason (if applicable)"
+
+# --- PAYMENT DESK ---
+- desk: "Payment Desk"
+  alias: "payment"
+  remarkType: "escalation"
+  handles:
+    - "Payment link generation (for order modifications)"
+    - "Failed payment verification"
+    - "Refund processing"
+    - "Payment not confirmed but claimed by customer"
+    - "Refund amount mismatch"
+  tat: "24 hours"
+  escalation_context_required:
+    - "Order ID"
+    - "Payment method"
+    - "Transaction ID"
+    - "Amount details"
+
+# --- IN-HOUSE ESCALATION TEAM ---
+- desk: "In-House Escalation Team"
+  alias: "in_house"
+  remarkType: "escalation"
+  handles:
+    - "Order cancellation requests (marking On Hold)"
+    - "Address/contact/GST detail changes"
+    - "Non-returnable item exceptions"
+    - "Complex cases requiring manual intervention"
+    - "Packed orders with no manifest (cancellation)"
+    - "High-Risk customer return reviews"
+    - "Replacement order (RP-) issues on second failure"
+  tat: "24 hours"
+  escalation_context_required:
+    - "Order ID"
+    - "Current status"
+    - "Change details / cancellation reason"
+    - "Hold status confirmation"
+    - "Customer classification (if High-Risk)"
+
+# --- PRODUCT SPECIALIST TEAM ---
+- desk: "Product Specialist Team"
+  alias: "product_specialist"
+  remarkType: "escalation"
+  handles:
+    - "Warranty claims requiring technical assessment"
+    - "Complex product troubleshooting beyond basic steps"
+    - "Repair/replacement assessment"
+    - "Product compatibility questions"
+    - "RVP (Reverse Pickup) arrangement"
+  tat: "24-48 hours"
+  escalation_context_required:
+    - "Order ID"
+    - "Product name/SKU"
+    - "Issue description"
+    - "Troubleshooting steps already tried"
+    - "Photos/video if available"
+    - "Warranty status"
+
+# --- TECH TEAM ---
+- desk: "Tech Team"
+  alias: "tech"
+  remarkType: "escalation"
+  handles:
+    - "App crash issues"
+    - "Website functional issues (search, cart, payment, login)"
+    - "Checkout failures"
+    - "Account-related issues"
+  tat: "24 hours"
+  escalation_context_required:
+    - "Registered contact/email"
+    - "Platform (Android/iOS/Web browser)"
+    - "Issue type (crash vs functional)"
+    - "Screenshots if functional issue"
+
+# --- RETURNS TEAM ---
+- desk: "Returns Team"
+  alias: "returns"
+  remarkType: "escalation"
+  handles:
+    - "Return requests beyond 10-day window (exception approval)"
+    - "Complex return scenarios"
+    - "Return rejection disputes"
+  tat: "24-48 hours"
+  escalation_context_required:
+    - "Order ID"
+    - "Delivery date"
+    - "Days since delivery"
+    - "Reason for late return"
+
+# --- CANCELLATION DESK ---
+- desk: "Cancellation Desk"
+  alias: "cancellation"
+  remarkType: "escalation"
+  handles:
+    - "Customer insists on refund when order in Confirmed status"
+    - "Cancellation processing after On Hold"
+  tat: "Refund in 5-7 working days"
+  escalation_context_required:
+    - "Order ID"
+    - "Cancellation reason"
+    - "Payment type (prepaid/COD)"
+
+# --- RE-ORDER DESK ---
+- desk: "Re-order Desk"
+  alias: "reorder"
+  remarkType: "escalation"
+  handles:
+    - "Fresh order placement from product list"
+    - "Re-order after cancellation with existing payment"
+    - "Order placed but cancelled — customer wants to re-order"
+  tat: "24-48 hours for processing"
+  escalation_context_required:
+    - "Original order ID"
+    - "Product details"
+    - "Customer preference"
+
+# --- SALES TEAM ---
+- desk: "Sales Team"
+  alias: "sales"
+  remarkType: "escalation"
+  handles:
+    - "Bulk quote requests (≥₹10,000)"
+    - "Institutional pricing"
+    - "Reseller inquiries"
+  tat: "Callback within 2 hours of form submission"
+  escalation_context_required:
+    - "Customer name, phone, email"
+    - "Product requirements"
+    - "Quantity needed"
+
+# --- QUALITY TEAM ---
+- desk: "Quality Team"
+  alias: "quality"
+  remarkType: "escalation"
+  handles:
+    - "Callback SLA breached"
+    - "Service quality complaints"
+    - "Process deviation reports"
+    - "Product return rate quality flags"
+  tat: "As per SLA"
+  escalation_context_required:
+    - "Original case ID"
+    - "SLA breach details"
+    - "Customer impact"
+
+# ============================================================
+# REMARK TYPE DEFINITIONS
+# ============================================================
+# remarkType: "notification"
+#   - Internal note for context only, no action required from desk
+#   - Examples: Product return rate flags, customer-not-responding notes,
+#     call-not-answered notes, customer classification FYI
+#
+# remarkType: "escalation"
+#   - Requires desk action within TAT
+#   - Must include: customer issue, expected resolution, SLA timeline
+#   - All desk entries above default to "escalation" type
+#
+# When creating ticket remarks, always specify the remarkType to help
+# desk teams prioritize and triage incoming tickets correctly.
+# ============================================================

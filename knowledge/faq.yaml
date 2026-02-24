@@ -1,0 +1,512 @@
+# ============================================================
+# Dentalkart FAQ Knowledge Base — Expanded from SOP Analysis
+# ============================================================
+
+# --- ORDER MANAGEMENT ---
+
+- question: "How do I track my order?"
+  answer: |
+    You can track your order by providing your phone number or order number. I'll look up the latest tracking information including AWB number, courier partner, and real-time delivery status.
+    You can also track directly at dentalkart.com/account/my-order/v2
+  tags: [track, order, delivery, shipping, status, kahan hai, order kab aayega]
+  category: orders
+
+- question: "When will my order be delivered? / Mera order kab aayega?"
+  answer: |
+    I can check the Estimated Delivery Date (EDD) for your order. Please share your order number or registered phone number.
+    If your order hasn't shipped yet, I'll share the expected ship-by date. If shipped, I'll provide the tracking status and expected delivery date from the courier partner.
+  tags: [delivery date, EDD, kab milega, kab aayega, expected delivery, estimated]
+  category: orders
+
+- question: "My order is delayed / Order nahi mila"
+  answer: |
+    I'm sorry about the delay! Let me check the current status. If the estimated delivery date has passed, I'll escalate this to our logistics team for priority handling.
+    Please share your order number so I can look into this immediately.
+  tags: [delayed, late, delay, nahi mila, nahi aaya, not received, overdue]
+  category: orders
+
+- question: "I want to check my order status"
+  answer: |
+    I'll look up your order status right away. Please share your registered phone number or order number.
+    I can tell you the current status (processing, shipped, out for delivery, delivered), tracking details, and estimated delivery date.
+  tags: [order status, check order, where is order, status check]
+  category: orders
+
+- question: "My order shows delivered but I haven't received it"
+  answer: |
+    I understand that's concerning. Let me check the delivery details including proof of delivery.
+    Sometimes packages are delivered to a neighbor or security guard. If it's genuinely missing, I'll raise a POD (Proof of Delivery) request with our logistics team. This may take 5–7 working days for investigation. Please note this applies to prepaid orders only.
+  tags: [not received, delivered, missing, lost, POD, proof of delivery, nahi mila]
+  category: delivery
+
+- question: "I received only some items, where's the rest?"
+  answer: |
+    Your order may have been shipped in multiple packages. Let me check the shipment details — if it's a multi-package shipment, I can track each package separately and share the delivery timeline for the remaining items.
+  tags: [partial delivery, some items, missing items, incomplete, multi-package]
+  category: delivery
+
+- question: "Can I confirm if my order was placed successfully?"
+  answer: |
+    Let me check! I'll search using your registered phone number or email. I can confirm the order details including products, price, and expected shipping timeline.
+    If your payment was received but order isn't showing, I'll escalate to our payment team for verification.
+  tags: [order confirmation, order placed, payment done, order check]
+  category: orders
+
+# --- CANCELLATION ---
+
+- question: "How do I cancel my order? / Order cancel karna hai"
+  answer: |
+    Cancellation depends on your order status:
+    • Before Packed/Shipped: Cancellation is possible. For COD orders, you can cancel directly from the app: Profile → My Orders → Expand → Cancel → Select reason → Submit
+    • After Packed/Shipped: Cancellation is not possible. You'll need to refuse delivery at the doorstep, or accept and raise a return request.
+    Please share your order number and I'll check the current status.
+  tags: [cancel, cancellation, cancel karna hai, order cancel, stop order]
+  category: orders
+
+- question: "Can I cancel part of my order? / Partial cancellation"
+  answer: |
+    Partial cancellation is possible only before the order is packed. If the item hasn't been picked/packed yet, I can raise a partial cancellation request.
+    If it's already packed, you'll need to accept delivery and raise a return for the unwanted items.
+    Please share your order number and which item(s) you want to cancel.
+  tags: [partial cancel, cancel one item, some items cancel, partial cancellation]
+  category: orders
+
+# --- ORDER MODIFICATION ---
+
+- question: "Can I change my delivery address? / Address change karna hai"
+  answer: |
+    Address changes are possible only before the order is packed. If it hasn't been packed yet and no manifest number has been generated, I can request the change.
+    Once packed with a manifest number, address changes are no longer possible.
+    Please share your order number and the new address details.
+  tags: [address change, modify address, change delivery, wrong address]
+  category: orders
+
+- question: "Can I modify my order? / Add or change products"
+  answer: |
+    Order modifications depend on the current status:
+    • New products cannot be added to an existing order — you'll need to place a new order.
+    • Product replacement is allowed only if status is Allocated or Confirmed.
+    • Beyond these stages, modifications aren't possible.
+    Please share your order number and what changes you need.
+  tags: [modify order, change order, add product, replace product, order modification]
+  category: orders
+
+- question: "I want to convert my order to COD / Change payment method"
+  answer: |
+    If your order is in Payment Pending stage, I can request COD conversion through our operations team. This may take up to 24 hours to process.
+    Please share your order number and I'll check the eligibility.
+  tags: [COD, cash on delivery, payment change, convert COD]
+  category: orders
+
+# --- RETURNS ---
+
+- question: "How do I return a product? / Return kaise karu?"
+  answer: |
+    Here are the steps to raise a return request:
+    1. Log into your Dentalkart account
+    2. Go to "My Orders"
+    3. Click the Track button for your order
+    4. Click "Return" button
+    5. Select the product and quantity to return
+    6. Choose the reason and action (Refund/Replacement)
+    7. Attach images/video of the product
+    8. Add a brief description and click Submit
+
+    You can also go directly to: dentalkart.com/account/my-order/v2
+
+    Important: Returns must be raised within 10 days of delivery.
+  tags: [return, refund, exchange, replace, return kaise, wapas karna hai]
+  category: returns
+
+- question: "What is the return policy? / Return policy kya hai?"
+  answer: |
+    Dentalkart's Return & Replacement Policy:
+    • 10-day return window from delivery date
+    • Report damaged/wrong/missing products within 48 hours of delivery
+    • Product must be unused with intact seal, all accessories, and original packaging
+    • Resolution priority: Replacement → Coupon → Refund
+    • Items below ₹150: Refund only (no return/replacement)
+    • Partial return fee: ₹95 if remaining order value is below ₹2,500
+    • Full order return fee: ₹95 if original order value is under ₹2,500
+    • Refund timeline: 5–7 working days after return is approved
+  tags: [return policy, return rules, return window, return days, kitne din mein return]
+  category: returns
+
+- question: "Which products cannot be returned? / Non-returnable items"
+  answer: |
+    The following categories are Non-Returnable:
+    • Products used directly on patients (tooth cream, mousse, MRC/ortho trainers, etc.)
+    • Opened consumables
+    • Products where seal has been tampered
+
+    Exception: If a non-returnable product is received damaged, defective, or incorrect — the case is escalated to our In-House Escalation Team for special approval.
+  tags: [non-returnable, cannot return, not returnable, return not possible]
+  category: returns
+
+- question: "What's the status of my return? / Return ka kya hua?"
+  answer: |
+    I can check your return status. Please share your order number or return ID.
+    I'll provide details on: return approval status, pickup scheduling, refund processing, and estimated timelines.
+  tags: [return status, return update, return kab hoga, refund status, return check]
+  category: returns
+
+- question: "Return pickup hasn't happened / Pickup nahi aaya"
+  answer: |
+    The reverse pickup should be attempted within 48 hours of return approval. If it's been more than 48 hours, I'll escalate this to our logistics team for re-scheduling.
+    Please don't click any "cancel pickup" OTPs from the courier — that would cancel your return request.
+  tags: [pickup not done, reverse pickup, pickup failed, pickup nahi aaya, RVP]
+  category: returns
+
+- question: "I received a damaged product / Damaged product mila"
+  answer: |
+    I'm sorry about that! Please report this within 48 hours of delivery for fastest resolution.
+    You'll need:
+    • Photos of the brown box (all sides) with shipping label visible
+    • Photo of the invoice/bill
+    • Photos/video of the damaged product
+
+    You can raise a return at dentalkart.com/account/my-order/v2 and select 'Damaged Product' as the reason.
+  tags: [damaged, broken, defective, quality, tuta hua, kharab, damage]
+  category: returns
+
+- question: "I received the wrong product / Galat product aaya"
+  answer: |
+    I apologize for the mix-up! Please raise a return at dentalkart.com/account/my-order/v2 and select 'Wrong Product Received'.
+    Include photos of what you received vs what you ordered. Once the return is processed, we'll arrange a replacement or refund.
+  tags: [wrong product, incorrect, different, mismatch, galat, wrong item]
+  category: returns
+
+- question: "Item/freebie is missing from my order / Saman nahi aaya"
+  answer: |
+    I'm sorry about the missing item! For items below ₹5,000 value, here's what we can do:
+    1. Replacement/Redispatch (preferred) — missing item reshipped within 1-2 business days
+    2. Coupon — equivalent value coupon if item is out of stock
+    3. Refund — processed within 5-7 business days
+
+    Please share your order number and details of what's missing. Photos of the received parcel and invoice are helpful.
+  tags: [missing item, freebie missing, item not received, saman nahi, missing product]
+  category: returns
+
+# --- REFUNDS ---
+
+- question: "When will I get my refund? / Refund kab milega?"
+  answer: |
+    Refund timelines:
+    • After return approval: 5–7 working days for processing
+    • Bank refund: Additional 3-5 business days to reflect in your account
+    • Store credit: Applied instantly
+    • Failed payment refund: 5-7 working days from the failed transaction
+
+    I can check the exact refund status for your order. Please share your order number.
+  tags: [refund, money back, credit, payment, refund kab, paisa kab aayega]
+  category: refunds
+
+- question: "Delivery boy charged extra money"
+  answer: |
+    I'm sorry to hear that. This is a serious concern. I'll immediately escalate this to our logistics team for investigation. You should receive an update within 24 hours.
+    Please share your order number and details of the extra charge.
+  tags: [extra payment, extra charge, delivery boy, delivery agent, overcharged]
+  category: delivery
+
+# --- PRODUCT ENQUIRY ---
+
+- question: "I'm looking for a dental product / Product search"
+  answer: |
+    I can help you find dental products! Tell me what you're looking for — I can search by product name, brand, or category and share availability, pricing, and product links.
+  tags: [product search, find product, product available, dental product, looking for]
+  category: products
+
+- question: "Is this product in stock? / Stock mein hai?"
+  answer: |
+    I can check the current stock status for any product. Please share the product name, SKU, or Dentalkart product link.
+    If the product is out of stock, you can use the "Notify Me" option on the product page to get alerted when it's back.
+  tags: [in stock, stock, available, availability, stock mein, out of stock]
+  category: products
+
+- question: "I want a bulk quote / Bulk order pricing"
+  answer: |
+    For bulk orders (minimum order value ₹10,000), please fill out our Bulk Quote Form:
+    https://forms.dentalkart.com/Dentalkart/form/BulkQuoteRequest1/formperma/1VYseSEODDapWtWJulHbHhLisjzp0HmvX7rWxGLvvq8
+
+    Our Sales Team will contact you within 2 hours of form submission.
+
+    I can also guide you through filling the form. You'll need: Name, Phone, Email, Address, Product link(s), Required quantity, and expected delivery date.
+  tags: [bulk, wholesale, quantity, discount, quote, bulk order, bulk pricing]
+  category: pricing
+
+# --- PAYMENT ---
+
+- question: "What payment methods do you accept?"
+  answer: |
+    Dentalkart accepts: Credit/Debit Cards (Visa, Mastercard, Rupay), UPI (GPay, PhonePe, Paytm), Net Banking, Wallets, EMI options, and Cash on Delivery (COD) for eligible orders.
+  tags: [payment, UPI, card, COD, EMI, net banking, payment method]
+  category: payment
+
+- question: "My payment failed but money was deducted"
+  answer: |
+    Don't worry! If your payment failed but money was deducted, it's usually a temporary hold that gets reversed automatically within 5-7 working days.
+    Please share your transaction ID, payment method, and screenshot — I'll escalate this to our payment team for verification.
+  tags: [payment failed, money deducted, payment issue, double charge, transaction failed]
+  category: payment
+
+# --- WARRANTY & SERVICE ---
+
+- question: "My product has a warranty issue / Warranty claim"
+  answer: |
+    I can help with warranty concerns. I'll need:
+    • Order number or product details
+    • Description of the issue (what's not working)
+    • Photos or short video showing the problem
+
+    I'll escalate to our Product Specialist team who will review and contact you within 24-48 hours.
+  tags: [warranty, guarantee, repair, service, replacement, warranty claim]
+  category: warranty
+
+# --- MEMBERSHIP & REWARDS ---
+
+- question: "What is Dentalkart Plus Membership? / Membership kya hai?"
+  answer: |
+    Dentalkart Plus Membership is a premium subscription program for dental professionals that gives you:
+    1. **Free Delivery** on all orders above ₹499
+    2. **Double Reward Value** — your reward coins are worth ₹1 each (instead of ₹0.50 for non-members)
+    3. **Priority Shipping** — expedited processing for faster delivery
+    4. **Education Pass Discount** — exclusive discounts on dental seminars and training programs
+
+    Two plans available:
+    • **6-Month Plan:** ₹499 (just ₹83/month)
+    • **1-Year Plan:** ₹799 (just ₹67/month) — most economical!
+
+    You can subscribe at: dentalkart.com/membership
+  tags: [membership, member, plus, premium, subscription, plan, plus membership, membership kya hai, dentalkart membership, about membership]
+  category: membership
+
+- question: "How much does Dentalkart Plus Membership cost? / Membership ka price kya hai?"
+  answer: |
+    Dentalkart Plus Membership plans:
+
+    • **Plan I — 6 Months:** ₹499 (₹83.2/month)
+    • **Plan II — 1 Year:** ₹799 (₹66.6/month) — recommended!
+
+    The 1-year plan is more economical and offers better value. With just one order per month of ₹5,000, you can save approximately ₹2,700 annually through reward benefits (~₹125/month) and free delivery (~₹100/month).
+  tags: [membership price, pricing, cost, kitna, plan price, membership fee, subscription cost, 499, 799, rate, charges]
+  category: membership
+
+- question: "How do I buy / activate Dentalkart Plus Membership? / Membership kaise lein?"
+  answer: |
+    To activate Dentalkart Plus Membership:
+    1. Visit dentalkart.com/membership (or the Membership section on the Dentalkart app)
+    2. Select your desired plan (6-month or 1-year)
+    3. Click "Add to Cart" / "Continue"
+    4. Fill in the required details and complete checkout
+    5. Benefits activate immediately after purchase!
+
+    You can pay via any supported payment method (UPI, card, net banking, etc.)
+  tags: [buy membership, activate, subscribe, how to join, kaise lein, membership start, sign up]
+  category: membership
+
+- question: "What are the benefits of Dentalkart Plus Membership?"
+  answer: |
+    Dentalkart Plus Members enjoy 4 key benefits:
+
+    1. **Free Delivery** — Free shipping on every order above ₹499. Only a ₹10 handling fee on COD orders.
+    2. **Double Reward Value** — Your reward coins are worth 2x:
+       • Members: 1 Coin = ₹1
+       • Non-members: 1 Coin = ₹0.50
+    3. **Priority Shipping** — Your orders get expedited processing for faster, more efficient delivery.
+    4. **Education Pass Discount** — Exclusive discounts on dental seminars, workshops, and training programs to boost your professional expertise.
+
+    Example savings: On a ₹5,000 monthly order with the yearly plan, you save approximately ₹2,700 per year!
+  tags: [membership benefits, advantages, features, kya milega, member benefits, free shipping, rewards, delivery, priority, education, double coins]
+  category: membership
+
+- question: "How do reward points / coins work? / Reward coins kaise use karu?"
+  answer: |
+    Dentalkart Reward Coins system:
+
+    **Earning Coins:**
+    • You earn reward coins on every purchase
+    • Coin value depends on your membership status:
+      - **Plus Members:** 1 Coin = ₹1 (double value!)
+      - **Non-Members:** 1 Coin = ₹0.50
+
+    **Using Coins:**
+    • Coins can be redeemed to reduce your order total at checkout
+    • They work alongside other discounts and coupons
+
+    **Important Note:**
+    • When you purchase a Plus Membership, existing reward points get halved in quantity — but their VALUE remains the same because each coin is now worth ₹1 instead of ₹0.50.
+    • Example: 200 coins at ₹0.50 = ₹100 → becomes 100 coins at ₹1 = ₹100 (same value!)
+  tags: [reward points, coins, loyalty, rewards, points kaise, coins value, redeem, coin use, membership coins, coin conversion, halved, double value]
+  category: membership
+
+- question: "Can I get a refund on my Dentalkart Plus Membership? / Membership cancel karna hai"
+  answer: |
+    The Plus Membership plan fee is **non-refundable**. Once purchased, the amount will not be refunded.
+
+    However, your membership benefits remain active for the full duration of your plan (6 months or 1 year from purchase date). You are not auto-enrolled for renewal — you choose whether to renew when your plan expires.
+  tags: [membership refund, cancel membership, membership cancel, membership return, non-refundable]
+  category: membership
+
+- question: "Can I use membership on multiple accounts? / Multiple accounts pe membership"
+  answer: |
+    No, one Plus Membership is applicable to only one Dentalkart account. Membership benefits cannot be shared across or transferred to other accounts.
+  tags: [multiple accounts, share membership, transfer membership, one account, single account]
+  category: membership
+
+- question: "Does membership work for all India deliveries? / Kya poore India mein milega?"
+  answer: |
+    Yes! Dentalkart Plus Membership benefits are available across all cities in India. Free delivery and priority shipping apply to all serviceable pin codes within India.
+
+    Note: International orders are NOT covered under the membership benefits.
+  tags: [membership india, all cities, delivery coverage, international, membership area]
+  category: membership
+
+- question: "When does my membership start? / Membership kab se shuru hogi?"
+  answer: |
+    Your Dentalkart Plus Membership activates immediately after successful payment. The validity period (6 months or 1 year) begins from your date of purchase.
+
+    Benefits are not retroactive — they apply only to orders placed after membership activation. Orders placed before purchasing the membership are not eligible for member benefits.
+  tags: [membership start, when active, validity, duration, kab se, shuru]
+  category: membership
+
+- question: "Will my membership auto-renew? / Automatic renewal hoga kya?"
+  answer: |
+    No, Dentalkart Plus Membership does NOT auto-renew. When your plan expires, you can choose whether to renew it or not. You will not be charged automatically.
+  tags: [auto renew, automatic, renewal, expire, expiry, auto charge]
+  category: membership
+
+- question: "Which membership plan should I choose? / Kaun sa plan lein?"
+  answer: |
+    We recommend the **1-Year Plan at ₹799** — it's the most economical option:
+
+    • 6-Month Plan: ₹499 (₹83/month)
+    • 1-Year Plan: ₹799 (₹67/month) — **saves ₹199** compared to buying two 6-month plans!
+
+    If you order at least once a month, the yearly plan pays for itself within the first 3-4 months through free delivery and double reward value alone.
+  tags: [which plan, best plan, recommend, compare plans, 6 month vs 1 year, kaun sa]
+  category: membership
+
+# --- GENERAL ---
+
+- question: "What are your delivery charges?"
+  answer: |
+    Dentalkart offers free delivery on eligible orders above the minimum threshold. Standard delivery typically takes 3-7 business days depending on your location. Express delivery may be available for select pin codes.
+  tags: [delivery, shipping, charges, cost, free delivery, delivery charge]
+  category: shipping
+
+- question: "How do I contact Dentalkart?"
+  answer: |
+    You can reach Dentalkart through:
+    1. This chat support
+    2. Email: support@dentalkart.com
+    3. Phone: 7289999456
+    4. Website: dentalkart.com/contact
+    Our support team is available Monday-Saturday, 9 AM to 9 PM IST.
+  tags: [contact, support, email, phone, help, call, number]
+  category: general
+
+- question: "Do you deliver to my area?"
+  answer: |
+    Dentalkart delivers across India. Delivery availability and timelines depend on your pin code. Please check product availability for your pin code on the product page or share your pin code and I'll check.
+  tags: [delivery, area, pincode, location, serviceable, deliver karte ho]
+  category: shipping
+
+- question: "What are your business hours? / Kab tak available ho?"
+  answer: |
+    Dentalkart's customer support is available Monday to Saturday, 9 AM to 9 PM IST.
+    Outside business hours, you can still share your concern here — I'll create a support ticket and our team will get back to you on the next working day.
+  tags: [hours, schedule, availability, timing, kab tak, business hours]
+  category: general
+
+# --- APP/WEB ISSUES ---
+
+- question: "The Dentalkart app is not working / App crash"
+  answer: |
+    I'm sorry for the inconvenience! Let's try some quick fixes:
+    • Close the app completely and restart it
+    • Check if the app needs an update from Play Store/App Store
+    • Clear the app cache: Settings → Apps → Dentalkart → Clear Cache
+
+    If the issue persists, please share: which device/OS you're using and at what point the app crashes. I'll escalate to our tech team (resolution within 24 hours).
+  tags: [app crash, app not working, app issue, crash, freeze, blank screen]
+  category: tech
+
+- question: "I can't add to cart / Payment not going through on website"
+  answer: |
+    Let me help troubleshoot:
+    • Try clearing your browser cache (Settings → Privacy → Clear Browsing Data → Cached Images/Files)
+    • Try a different browser or the Dentalkart app
+    • Check if the product is in stock
+    • For payment issues, try an alternate payment method or check with a stable internet connection
+
+    If unresolved, I'll escalate to our tech team with your account details.
+  tags: [add to cart, cart issue, website issue, payment issue, checkout, web problem]
+  category: tech
+
+# --- CALLBACK ---
+
+- question: "I want someone to call me / Callback chahiye"
+  answer: |
+    I'll arrange a callback for you. Can you please confirm:
+    1. Your preferred phone number
+    2. Preferred time slot (our support hours are 9 AM - 9 PM IST)
+    3. Brief description of your concern
+
+    A team member will call you back during the requested time slot.
+  tags: [callback, call me, phone call, call back, baat karo, call karo]
+  category: general
+
+# --- REPLACEMENT ORDERS (RP-) ---
+
+- question: "What does RP- mean in my order number? / RP order kya hai?"
+  answer: |
+    An order number starting with RP- is a Replacement Order — it was created as a replacement for a previous return or defective product.
+    RP- orders are tracked separately but follow the same delivery timelines. If you have any issues with your replacement order, please share the RP- order number and I'll check the status.
+  tags: [RP, replacement order, RP order, replacement, RP- prefix]
+  category: orders
+
+# --- COLOR/VARIANT ISSUES ---
+
+- question: "I received the wrong color / Galat color aaya"
+  answer: |
+    I'm sorry about the color mismatch! This is a valid return reason.
+    I'll initiate the return process — we'll ensure you receive the exact color you ordered.
+    If the specific color is currently unavailable, I'll offer you the choice to wait for restock or get a full refund.
+    Please share your order number and the color you actually ordered vs what you received.
+  tags: [wrong color, color mismatch, wrong shade, wrong variant, galat color, color issue]
+  category: returns
+
+# --- FAILED DELIVERY ---
+
+- question: "My delivery failed / Delivery nahi ho payi"
+  answer: |
+    I'm sorry about the failed delivery! Let me check the tracking details.
+    Common reasons include: customer unavailable, wrong address, or premises closed.
+    Depending on the reason, I can arrange a re-delivery or help update the address.
+    Please share your order number and I'll look into it immediately.
+  tags: [failed delivery, delivery failed, not delivered, undelivered, delivery nahi hua, delivery attempt]
+  category: delivery
+
+# --- WRONG RETURN REASON ---
+
+- question: "I selected the wrong return reason in the app"
+  answer: |
+    No worries! I can help correct that.
+    Please tell me the actual reason for the return and I'll update it in our system.
+    It's important to have the correct reason for faster processing of your return.
+  tags: [wrong reason, return reason, wrong return, incorrect reason, galat reason]
+  category: returns
+
+# --- RETURN STATUS ---
+
+- question: "How do I know my return status? / Return ka status kya hai?"
+  answer: |
+    I can check your return status for you! Please share your order number.
+    I'll provide details on:
+    • Whether your return has been approved
+    • Reverse pickup scheduling status
+    • If pickup is done, warehouse receipt status
+    • Refund processing status and timeline
+    The typical journey is: Return Approved → Pickup Scheduled → Picked Up → Reached Warehouse → Refund Processed (5-7 working days).
+  tags: [return status, return tracking, return progress, return update, return kahan tak, wapsi status]
+  category: returns

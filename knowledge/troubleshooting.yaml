@@ -1,0 +1,516 @@
+# ============================================================
+# Dentalkart Product Troubleshooting Decision Trees
+# Derived from SOP articles for AI-guided troubleshooting
+# ============================================================
+
+# --- CONTRA-ANGLE HANDPIECE ---
+- id: contra-angle-handpiece
+  product: "Contra-Angle Handpiece"
+  category: handpieces
+  issues:
+    - issue: "Handpiece stopped working / Bur not rotating"
+      steps:
+        - "Disconnect handpiece from motor, check for physical damage"
+        - "Ensure bur is securely locked in the handpiece"
+        - "Manually rotate bur — it should turn smoothly"
+        - "Test with another handpiece on the same motor (if second also fails → motor issue)"
+        - "Oil handpiece from the bottom using supplied nozzle, re-test"
+        - "If unresolved → dismantle, clean internally (gear shaft), lubricate, reassemble, re-test"
+        - "If still unresolved → Arrange RVP (Reverse Pickup). Out-of-warranty: provide cost estimate"
+
+    - issue: "Bur is loose / Slips on teeth"
+      steps:
+        - "Disconnect from motor"
+        - "Verify use of standard 2.35mm diameter CA bur"
+        - "Check locking mechanism: Latch type → verify latch locked; Push button → check mechanism"
+        - "If mechanism damaged → Arrange RVP. Out-of-warranty: provide cost estimate"
+
+    - issue: "Noise / Vibration / Wobbling"
+      steps:
+        - "Disconnect, inspect for physical damage, verify bur integrity (replace if bent/damaged)"
+        - "Replace damaged bur immediately"
+        - "Oil handpiece from bottom, re-test"
+        - "If persists → possible cartridge or shaft damage → Arrange RVP"
+
+    - issue: "Overheating"
+      steps:
+        - "Disconnect, inspect for physical damage"
+        - "Check usage duration — prolonged use (>1 hour) naturally causes overheating"
+        - "Oil handpiece from bottom, re-test"
+        - "If persists → possible bearing damage → Arrange RVP"
+
+    - issue: "Difficulty attaching or detaching"
+      steps:
+        - "Power off and unplug"
+        - "Clean motor connection area and handpiece base"
+        - "Attempt gentle re-attachment"
+        - "If still stuck → possible internal thread or coupler issue → Arrange RVP"
+
+# --- AIROTOR ---
+- id: airotor
+  product: "Airotor Handpiece"
+  category: handpieces
+  issues:
+    - issue: "No water coming out"
+      steps:
+        - "Identify type: 2-spray or 3/4-spray airotor?"
+        - "If 3/4-spray (non-Tesla) → Arrange RVP directly"
+        - "If Tesla → follow Tesla-specific steps"
+        - "If 2-spray → Check water supply connection to dental unit"
+        - "Check if water bottle/supply has adequate water"
+        - "Check for blockage in water line"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Bur not rotating / Low speed"
+      steps:
+        - "Check air pressure (should be 2.0-2.5 bar / 30-35 PSI)"
+        - "Check if bur is properly seated"
+        - "Oil handpiece and test again"
+        - "If unresolved → possible turbine/rotor issue → Arrange RVP"
+
+    - issue: "Noise / Vibration"
+      steps:
+        - "Check bur for damage (replace if bent)"
+        - "Oil handpiece properly"
+        - "Check air pressure settings"
+        - "If persists → rotor/bearing wear → Arrange RVP"
+
+    - issue: "Light not working (LED models)"
+      steps:
+        - "Check if dental unit's light function is enabled"
+        - "Clean fiber optic connection point"
+        - "Test with another handpiece to isolate issue"
+        - "If handpiece-specific → LED/fiber optic issue → Arrange RVP"
+
+# --- MICROMOTOR ---
+- id: micromotor
+  product: "Micromotor"
+  category: motors
+  applicable_models:
+    - "Marathon M4 (Lab) Micromotor"
+    - "Waldent Advanced Clinical Micromotor Kit"
+    - "Waldent Professional Micromotor Kit"
+    - "Marathon M3 Complete Set"
+    - "API Dental Micromotor Complete Set"
+  issues:
+    - issue: "Product not turning ON"
+      steps:
+        - "Ask: Is the power cable properly plugged into socket and machine?"
+        - "If No → Connect properly, retest"
+        - "Test socket with another device"
+        - "If socket not working → Change socket, retest"
+        - "Ask: Is the control box power switch ON?"
+        - "If No → Switch ON, retest"
+        - "If still not working → Arrange RVP"
+
+    - issue: "Bur not rotating"
+      steps:
+        - "Confirm unit is powered ON"
+        - "Check speed setting — increase slightly if at minimum"
+        - "Check hand/foot mode switch — if foot mode, ensure pedal is pressed"
+        - "Check handpiece attachment to control box"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Speed inconsistency"
+      steps:
+        - "Adjust and confirm correct speed settings"
+        - "Ensure handpiece is securely attached and clear of debris"
+        - "If persists → possible control box issue → Arrange RVP"
+
+    - issue: "Excessive vibration or noise"
+      steps:
+        - "Inspect handpiece/motor for damage or wear"
+        - "Lubricate regularly to reduce friction"
+        - "If persists → Arrange RVP"
+
+    - issue: "Overheating"
+      steps:
+        - "Ensure operating in well-ventilated area"
+        - "Allow cooling periods after extended use (duty cycle)"
+        - "If overheating persists quickly → Arrange RVP"
+
+    - issue: "Intermittent stopping during use"
+      steps:
+        - "Check all cable connections"
+        - "Check foot pedal connection (if applicable)"
+        - "If persists → Arrange RVP"
+
+# --- RVG (Digital X-Ray Sensor) ---
+- id: rvg
+  product: "RVG (Radiovisiograph) Sensor"
+  category: imaging
+  issues:
+    - issue: "RVG not detected by software"
+      steps:
+        - "Check and reconnect USB cable"
+        - "Try different USB port"
+        - "Open Device Manager, check if sensor appears under Imaging Devices"
+        - "If not recognized → reinstall/update driver from manufacturer website"
+        - "Ensure correct RVG model selected in imaging software settings"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Image not capturing / Black screen"
+      steps:
+        - "Restart software and reconnect sensor"
+        - "Verify X-ray unit is functioning with correct exposure settings"
+        - "Check sensor for physical damage (cracks, exposed wires)"
+        - "Try sensor on different computer if available"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Software freezes/crashes with RVG"
+      steps:
+        - "Update RVG software to latest version"
+        - "Disable other imaging devices/drivers temporarily"
+        - "Close background applications to free memory"
+        - "Check OS compatibility with RVG software"
+
+    - issue: "Poor image quality (blurred/noisy)"
+      steps:
+        - "Ensure proper sensor placement and stabilization during exposure"
+        - "Clean sensor with manufacturer-approved wipe"
+        - "Calibrate sensor if software allows"
+        - "Test with known good sensor if available"
+
+    - issue: "Sensor gets hot during use"
+      steps:
+        - "Allow sensor to cool between exposures"
+        - "Try using a powered USB hub"
+        - "If heating persists → Arrange RVP (contact manufacturer)"
+
+# --- INTRAORAL CAMERA ---
+- id: intraoral-camera
+  product: "Intraoral Camera"
+  category: imaging
+  issues:
+    - issue: "Camera not powering on"
+      steps:
+        - "Ensure camera is connected to PC/USB power source"
+        - "Try different USB port (preferably USB 2.0)"
+        - "Avoid USB hubs — plug directly into PC"
+        - "If using external power, check adapter and cable"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Camera not recognized by computer"
+      steps:
+        - "Check Device Manager → Imaging Devices"
+        - "Unplug/replug and listen for connection sound"
+        - "Reinstall or update camera driver"
+        - "Try camera on different PC"
+
+    - issue: "No image / Black screen"
+      steps:
+        - "Check if lens cap is on"
+        - "Ensure correct video source selected in software"
+        - "Check lens for dirt or obstructions"
+        - "Test in Windows Camera app or Zoom to isolate issue"
+
+    - issue: "Frozen/laggy video"
+      steps:
+        - "Close other video programs (Zoom, Teams)"
+        - "Try different USB port (avoid front panel)"
+        - "Ensure PC meets system requirements"
+
+    - issue: "Capture button not working"
+      steps:
+        - "Reinstall manufacturer driver"
+        - "Configure button in imaging software (may need manual setup)"
+        - "Test if button works in other capture software"
+
+# --- DENTAL X-RAY MACHINE ---
+- id: xray-machine
+  product: "Dental X-Ray Machine"
+  category: imaging
+  issues:
+    - issue: "Machine not powering on"
+      steps:
+        - "Ensure power switch and wall socket are ON"
+        - "Check power cable at both ends"
+        - "Try different power outlet"
+        - "Inspect fuse if accessible, replace if blown"
+        - "If still not turning on → escalate to technician"
+
+    - issue: "No exposure / X-ray not firing"
+      steps:
+        - "Verify hand switch/timer is functional"
+        - "Check for error codes on display"
+        - "Let unit cool if used repeatedly (wait 5-10 minutes)"
+        - "Ensure all safety interlocks are closed"
+        - "Check exposure settings (kVp, mA, time)"
+
+    - issue: "Blurry or underexposed images"
+      steps:
+        - "Reposition patient and sensor properly"
+        - "Increase exposure time or check kVp/mA values"
+        - "Use positioning device to stabilize sensor"
+        - "Ensure tube head is locked and doesn't drift"
+
+    - issue: "Error codes on display"
+      steps:
+        - "Refer to user manual for exact error code meaning"
+        - "Power cycle the unit (turn off, wait, turn on)"
+        - "Adjust exposure settings to defaults"
+        - "If error persists → escalate to technician"
+
+# --- AUTOCLAVE ---
+- id: autoclave
+  product: "Autoclave"
+  category: sterilization
+  applicable_models:
+    - "Dentis Insta-clave Autoclave 14L (1 year warranty)"
+    - "Life Stericlave with Rotary Timer 12L (1 year warranty)"
+    - "Life Stericlave 22L Electric (1 year warranty)"
+  issues:
+    - issue: "Handle damaged"
+      steps:
+        - "Check if within 15 days of delivery"
+        - "If Yes → Send new handle free of charge"
+        - "If No → Share handle cost, ship on customer approval"
+
+    - issue: "Not heating / Not reaching temperature"
+      steps:
+        - "Check power connection and socket"
+        - "Verify power switch is ON"
+        - "Check water level (must be adequate)"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Steam leaking"
+      steps:
+        - "Check lid/door seal for damage or debris"
+        - "Ensure lid is properly closed and locked"
+        - "Clean gasket/seal area"
+        - "If seal damaged → replacement needed → Arrange RVP"
+
+    - issue: "Not building pressure"
+      steps:
+        - "Check water level"
+        - "Inspect safety valve"
+        - "Check gasket seal"
+        - "If unresolved → Arrange RVP"
+
+# --- ENDOMOTOR ---
+- id: endomotor
+  product: "EndoExcellence Canal Commander Cordless LED Endomotor"
+  category: endodontics
+  issues:
+    - issue: "Not powering ON"
+      steps:
+        - "Confirm charged for 3-4 hours with correct cable/adapter"
+        - "If not charged → charge correctly and retry"
+        - "Check if charging light turns ON when docked"
+        - "If no charging sign → check adapter, dock connection, placement"
+        - "Press and hold power button for 3-5 seconds"
+        - "Check for physical damage"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "File not rotating"
+      steps:
+        - "Check contra-angle attachment is secure"
+        - "Verify file is properly inserted"
+        - "Check torque and speed settings"
+        - "Try different mode (Forward/Reverse/Reciprocating)"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Auto-reverse not working"
+      steps:
+        - "Verify torque setting is appropriate for the file"
+        - "Check if correct mode is selected"
+        - "Test with different file"
+        - "If unresolved → Arrange RVP"
+
+# --- GUTTA PERCHA CUTTER ---
+- id: gutta-percha-cutter
+  product: "EndoKing Gutta Percha Cutter"
+  category: endodontics
+  warranty: "1 year manufacturer warranty (tips not covered)"
+  notes: "Only tips are autoclavable, NOT the handpiece"
+  issues:
+    - issue: "Does not heat / Cuts only once"
+      steps:
+        - "Ask: Was unit charged ≥2 hours on USB-C 5V 2A adapter?"
+        - "If No → Advise full 2-hour charge, retest"
+        - "Ask: Does the tip glow red when button pressed?"
+        - "If Yes → Ask if tip is carbonised → If yes, send new tips (FOC if in warranty)"
+        - "If No glow → possible heating element issue → Arrange RVP"
+
+    - issue: "Tip loose / Does not grip"
+      steps:
+        - "Check if correct tip model is being used"
+        - "Ensure tip is fully inserted and seated"
+        - "Try a different tip"
+        - "If handpiece socket issue → Arrange RVP"
+
+    - issue: "Battery drains quickly"
+      steps:
+        - "Confirm proper charging (2 hours, correct adapter)"
+        - "Check if unit was stored in extreme temperature"
+        - "If battery life significantly reduced → Arrange RVP"
+
+# --- BUTANE GAS TORCH ---
+- id: butane-gas-torch
+  product: "Jinguang Butane Gas Torch"
+  category: accessories
+  video_link: "https://youtu.be/npHTflpYb_E"
+  issues:
+    - issue: "Flame not igniting"
+      steps:
+        - "Check gas level — refill if low"
+        - "Ensure flame adjustment knob is not at minimum"
+        - "Check ignition mechanism (piezo/electronic)"
+        - "Inspect nozzle for dust, soot, or blockage"
+        - "Let torch reach room temperature if cold"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Irregular / Uneven flame"
+      steps:
+        - "Clean nozzle with compressed air"
+        - "Adjust flame control knob"
+        - "Check for gas leakage (smell test near refill valve)"
+        - "Refill properly (hold upside down, 5-10 seconds)"
+
+    - issue: "Gas leaking"
+      steps:
+        - "STOP using immediately"
+        - "Move to well-ventilated area"
+        - "Check refill valve for damage"
+        - "Do NOT attempt repair → Arrange RVP or replacement"
+
+# --- UV CHAMBER ---
+- id: uv-chamber
+  product: "Dentis UV Chamber Insta UV"
+  category: sterilization
+  notes: "UV chambers are for disinfection only — do NOT replace autoclave sterilization"
+  issues:
+    - issue: "Not turning ON"
+      steps:
+        - "Ask: Is power plug properly inserted and socket working?"
+        - "If No → reconnect plug, test socket with another appliance"
+        - "Ask: Is main power switch turned ON?"
+        - "If No → switch ON, retest"
+        - "If still not working → Arrange RVP"
+
+    - issue: "UV light not glowing"
+      steps:
+        - "Check if door is completely closed (safety interlock)"
+        - "Verify power is ON and unit is running"
+        - "UV lamp may need replacement (check hours of use)"
+        - "If new unit → Arrange RVP"
+
+    - issue: "Strange smell during operation"
+      steps:
+        - "Ensure instruments are clean and dry BEFORE placing inside"
+        - "Check for any debris or foreign material inside chamber"
+        - "If smell persists → stop use, Arrange RVP"
+
+# --- STRAIGHT HANDPIECE ---
+- id: straight-handpiece
+  product: "Waldent Straight Handpiece Special Edition (W-134)"
+  category: handpieces
+  notes: "Accepts 2.35mm diameter straight burs. Max autoclave temp: 135°C"
+  issues:
+    - issue: "Not rotating / Not starting"
+      steps:
+        - "Check connection to dental unit's E-type coupler (should click into place)"
+        - "Verify motor is powered on"
+        - "Check if bur is properly seated (2.35mm diameter)"
+        - "Test with another handpiece on same motor"
+        - "If motor works with other handpiece → handpiece issue → Arrange RVP"
+
+    - issue: "Excessive vibration"
+      steps:
+        - "Check bur for damage (replace if bent)"
+        - "Verify bur is correctly inserted and locked"
+        - "Clean and lubricate handpiece"
+        - "If persists → internal bearing issue → Arrange RVP"
+
+    - issue: "Overheating during use"
+      steps:
+        - "Avoid excess pressure — let bur do the work"
+        - "Allow cooling between procedures"
+        - "Lubricate handpiece"
+        - "If overheating occurs quickly → Arrange RVP"
+
+# --- SCALER TIPS ---
+- id: scaler-tips
+  product: "Ultrasonic Scaler Tips"
+  category: periodontics
+  notes: |
+    COMPATIBILITY IS CRITICAL:
+    - DTE/Satelec type → Use GD, PD, ED series tips
+    - EMS/UDS type → Use G and E series tips
+    - Tips are NOT interchangeable between types
+  issues:
+    - issue: "Tip not vibrating / Not working"
+      steps:
+        - "FIRST: Verify compatibility — which scaler model? Which tip type?"
+        - "If incompatible → Inform customer, suggest correct tip type"
+        - "If compatible → Check tip is properly threaded into handpiece"
+        - "Check scaler unit power and settings"
+        - "Try a different tip on same scaler"
+        - "If scaler works with other tips → tip defective → replacement"
+
+    - issue: "Tip wearing out quickly"
+      steps:
+        - "Verify using correct power level for the procedure"
+        - "Tips are consumable and wear with use — this is normal"
+        - "Check if using correct tip type for the procedure"
+
+    - issue: "Water not flowing through tip"
+      steps:
+        - "Check water supply connection to scaler unit"
+        - "Verify water bottle/supply has adequate water"
+        - "Clean tip water port (may be blocked)"
+        - "If unresolved → scaler unit issue"
+
+# --- GLASS BEAD STERILIZER ---
+- id: glass-bead-sterilizer
+  product: "Waldent Digital Glass Bead Sterilizer"
+  category: sterilization
+  video_link: "https://youtu.be/sGj-qeOb_v0"
+  issues:
+    - issue: "Not turning ON"
+      steps:
+        - "Check power supply: 220-240V, 50Hz"
+        - "Verify power cable connection"
+        - "Check power switch"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Not reaching temperature / Slow heating"
+      steps:
+        - "Ensure glass beads are filled to correct level (just below rim)"
+        - "Wait for display to show 'READY TO USE' with buzzer"
+        - "Check if placed on stable, flat surface"
+        - "If heating element issue → Arrange RVP"
+
+    - issue: "Display not working"
+      steps:
+        - "Power cycle the unit"
+        - "Check power supply"
+        - "If display still blank → Arrange RVP"
+
+# --- IMPLANT STABILITY TESTER ---
+- id: implant-stability-tester
+  product: "DentalPlant Implant Stability Tester"
+  category: implantology
+  product_link: "https://www.dentalkart.com/dentalplant-implant-stability-tester.html"
+  issues:
+    - issue: "Device not powering on"
+      steps:
+        - "Check USB cable and adapter connection"
+        - "Ensure battery is charged"
+        - "Power cycle the device"
+        - "If unresolved → Arrange RVP"
+
+    - issue: "Inconsistent readings"
+      steps:
+        - "Use calibrator before each measurement session"
+        - "Ensure SmartPeg is properly attached to implant"
+        - "Check for metal interference near measurement area"
+        - "Use disposable sleeve as instructed"
+        - "If calibration fails → Arrange RVP"
+
+    - issue: "SmartPeg not detected"
+      steps:
+        - "Verify SmartPeg is compatible and properly seated"
+        - "Check if SmartPeg is damaged (single use recommended)"
+        - "Ensure device probe is positioned correctly"
+        - "Try a new SmartPeg"
