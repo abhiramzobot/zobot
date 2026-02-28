@@ -431,7 +431,7 @@ export class AgentCore {
           if (items.length > 0) {
             parts.push(`  Items: ${items.map((i) => `${i.name} x${i.shippedQty}`).join(', ')}`);
           }
-          if (s.invoiceUrl) parts.push(`  📄 Invoice: ${s.invoiceUrl}`);
+          if (s.invoiceUrl) parts.push(`  📄 [Download Invoice](${s.invoiceUrl})`);
         }
       }
       else if (tr.tool === 'get_shipment_details' && !data.found) {
@@ -476,8 +476,8 @@ export class AgentCore {
       // ── get_order_invoice ──
       else if (tr.tool === 'get_order_invoice' && data.found && data.invoiceUrl) {
         detectedIntent = 'invoice_download';
-        parts.push(`📄 Invoice for order ${data.orderNo}:`);
-        parts.push(`Download your invoice here: ${data.invoiceUrl}`);
+        parts.push(`Here is the invoice for your order ${data.orderNo}:`);
+        parts.push(`📄 [Download Invoice](${data.invoiceUrl})`);
       }
       else if (tr.tool === 'get_order_invoice' && !data.found) {
         detectedIntent = 'invoice_download';

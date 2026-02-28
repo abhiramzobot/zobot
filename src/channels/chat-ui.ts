@@ -1180,8 +1180,18 @@ function addBotMsg(text, ts) {
   html = html.replace(/\\*\\*(.+?)\\*\\*/g, '<b>$1</b>');
   // Convert markdown links [text](url) to clickable links
   html = html.replace(/\\[([^\\]]+)\\]\\(([^)]+)\\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#1a73e8;text-decoration:underline">$1</a>');
-  // Convert bare URLs to clickable links (only those not already inside an href)
-  html = html.replace(/(?<!href=&quot;)(https?:\\/\\/[^\\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#1a73e8;text-decoration:underline">$1</a>');
+  // Convert bare URLs to clickable links (skip those already inside an <a> tag)
+  html = html.replace(/(https?:\\/\\/[^\\s<"]+)/g, function(match, _p1, offset, fullStr) {
+    // Check if this URL is already inside an href attribute (from markdown link conversion above)
+    var preceding = fullStr.substring(Math.max(0, offset - 10), offset);
+    if (preceding.indexOf('href="') !== -1 || preceding.indexOf("href='") !== -1) return match;
+    // Check if inside an <a> tag that hasn't been closed yet
+    var before = fullStr.substring(Math.max(0, offset - 300), offset);
+    var lastOpen = before.lastIndexOf('<a ');
+    var lastClose = before.lastIndexOf('</a>');
+    if (lastOpen !== -1 && lastOpen > lastClose) return match;
+    return '<a href="' + match + '" target="_blank" rel="noopener" style="color:#1a73e8;text-decoration:underline">' + match + '</a>';
+  });
   d.innerHTML = html;
   chatMessages.appendChild(d);
   addTimestamp(ts || Date.now(), 'bot-time');
@@ -1953,8 +1963,11 @@ function renderShipmentDetails(shipData) {
     if (shipStatus === 'delivered') {
       // Delivered: Return + Download Invoice
       html += '<button class="shipment-track-btn" onclick="triggerAction(\\'I want to return order '+escapeHtml(orderNo)+'\\')">🔄 Return</button>';
-      if (shipment.invoiceNo) {
-        html += '<button class="shipment-track-btn" style="background:var(--primary)" onclick="triggerAction(\\'Download invoice '+escapeHtml(shipment.invoiceNo)+' for order '+escapeHtml(orderNo)+'\\')">📄 Download Invoice</button>';
+      if (shipment.invoiceUrl) {
+        // Direct PDF download link — no LLM round-trip needed
+        html += '<a class="shipment-track-btn" style="background:var(--primary);text-decoration:none;color:#fff" href="'+escapeHtml(shipment.invoiceUrl)+'" target="_blank" rel="noopener">📄 Download Invoice</a>';
+      } else if (shipment.invoiceNo) {
+        html += '<button class="shipment-track-btn" style="background:var(--primary)" onclick="triggerAction(\\'Download invoice for order '+escapeHtml(orderNo)+'\\')">📄 Download Invoice</button>';
       }
     } else if (shipStatus === 'shipped' || shipStatus === 'packed') {
       // In-transit / Packed: Track + Cancel
