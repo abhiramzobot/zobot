@@ -198,10 +198,36 @@ const handler: ToolHandler = async (args, ctx) => {
       };
     });
 
+    // ── Auto-fetch invoice URLs for each shipment (parallel, best-effort) ──
+    const invoiceApiUrl = env.dentalkartInvoice.baseUrl;
+    const shipmentsWithInvoice = await Promise.all(
+      shipments.map(async (ship) => {
+        if (!ship.trackingNumber) return ship;
+        try {
+          const invResp = await fetch(invoiceApiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: '*/*', platform: 'web' },
+            body: JSON.stringify({ awb_number: ship.trackingNumber, order_id: orderNo }),
+            signal: AbortSignal.timeout(5000),
+          });
+          if (invResp.ok) {
+            const invData = (await invResp.json()) as Record<string, unknown>;
+            const pdfLink = String(invData?.pdf_link ?? '').trim();
+            if (pdfLink && invData?.is_error !== true) {
+              return { ...ship, invoiceUrl: pdfLink };
+            }
+          }
+        } catch {
+          // Invoice fetch failed — not critical, return shipment without invoice
+        }
+        return ship;
+      }),
+    );
+
     log.info({
       orderNo,
-      shipmentCount: shipments.length,
-      trackingNumbers: shipments.map((s) => s.trackingNumber),
+      shipmentCount: shipmentsWithInvoice.length,
+      trackingNumbers: shipmentsWithInvoice.map((s) => s.trackingNumber),
     }, 'Shipment details retrieved');
 
     return {
@@ -210,8 +236,8 @@ const handler: ToolHandler = async (args, ctx) => {
         found: true,
         orderNo,
         _internalOrderNo: matchedOrder.orderNo ?? orderNo,
-        shipmentCount: shipments.length,
-        shipments,
+        shipmentCount: shipmentsWithInvoice.length,
+        shipments: shipmentsWithInvoice,
       },
     };
   } catch (err) {

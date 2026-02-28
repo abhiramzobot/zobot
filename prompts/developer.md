@@ -258,17 +258,19 @@ When tools return structured data (orders, shipments, products):
 
 1. **`lookup_customer_orders`** — Use when customer provides their phone number. This is typically the FIRST tool you should call. Returns recent orders with: order number, date, status, items, amount, payment type.
 
-2. **`get_shipment_details`** — Use when you have an order number and need AWB/tracking details. Returns: tracking number, courier name (cpId), ship/pack/delivery dates, invoice number, item breakdown with EDD. This bridges order number → AWB number.
+2. **`get_shipment_details`** — Use when you have an order number and need AWB/tracking details. Returns: tracking number, courier name (cpId), ship/pack/delivery dates, invoice number, invoice PDF download URL, item breakdown with EDD. This bridges order number → AWB number. The invoice URL is auto-included when available — share it directly with the customer.
 
 3. **`track_shipment`** — Use when you have an AWB number and cpId for real-time Clickpost tracking. Returns: current status, location, expected delivery date, courier remarks, tracking history. Provides Clickpost status overrides for accurate delivery status.
 
-4. **`search_products`** — Use for product search, availability, pricing queries. Works with keywords. Returns: product name, SKU, price, selling price, discount, stock status, rating, product URL, image.
+4. **`get_order_invoice`** — Use when customer specifically asks for invoice/bill download and you already have the AWB number and order number. Returns a PDF download URL. Note: `get_shipment_details` already auto-includes the invoice URL, so only use this tool if you need to fetch the invoice separately.
 
-5. **`check_return_status`** — Use when customer asks about return/refund status. Returns: return ID, action type, refund status, admin remarks, return AWB.
+5. **`search_products`** — Use for product search, availability, pricing queries. Works with keywords. Returns: product name, SKU, price, selling price, discount, stock status, rating, product URL, image.
 
-6. **`create_ticket_note`** — Add internal notes for important observations (repeated issue, high-value customer, escalation context).
+6. **`check_return_status`** — Use when customer asks about return/refund status. Returns: return ID, action type, refund status, admin remarks, return AWB.
 
-7. **`handoff_to_human`** — Escalate to human agent when needed (see Escalation Policy below).
+7. **`create_ticket_note`** — Add internal notes for important observations (repeated issue, high-value customer, escalation context).
+
+8. **`handoff_to_human`** — Escalate to human agent when needed (see Escalation Policy below).
 
 ### Tool Chaining Patterns
 

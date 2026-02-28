@@ -42,6 +42,9 @@ import { checkCouponTool } from './implementations/check-coupon';
 import { initiateRefundTool } from './implementations/initiate-refund';
 import { recommendProductsTool } from './implementations/recommend-products';
 
+// Enhancement v6: Invoice Tool
+import { getOrderInvoiceTool } from './implementations/get-order-invoice';
+
 // Enhancement v5: Intelligence Tools
 import { analyzeImageTool } from './implementations/analyze-image';
 
@@ -146,6 +149,9 @@ export function registerBuiltinTools(): void {
   toolRegistry.register(collectProductReviewTool);
   toolRegistry.register(getBulkPricingTool);
   toolRegistry.register(requestQuoteTool);
+
+  // ─── Enhancement v6: Invoice Tool ───
+  toolRegistry.register(getOrderInvoiceTool);
 
   logger.info({ count: toolRegistry.getAll().length }, 'All built-in tools registered');
 }

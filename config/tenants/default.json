@@ -25,7 +25,8 @@
     "analyze_image",
     "collect_product_review",
     "get_bulk_pricing",
-    "request_quote"
+    "request_quote",
+    "get_order_invoice"
   ],
   "channelPolicies": {
     "whatsapp": {
@@ -54,7 +55,8 @@
         "analyze_image",
         "collect_product_review",
         "get_bulk_pricing",
-        "request_quote"
+        "request_quote",
+        "get_order_invoice"
       ],
       "maxTurnsBeforeEscalation": 12,
       "streamingEnabled": false,
@@ -62,7 +64,14 @@
         "start": "09:00",
         "end": "21:00",
         "timezone": "Asia/Kolkata",
-        "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat"
+        ]
       }
     },
     "business_chat": {
@@ -91,7 +100,8 @@
         "analyze_image",
         "collect_product_review",
         "get_bulk_pricing",
-        "request_quote"
+        "request_quote",
+        "get_order_invoice"
       ],
       "maxTurnsBeforeEscalation": 12,
       "streamingEnabled": false,
@@ -99,7 +109,14 @@
         "start": "09:00",
         "end": "21:00",
         "timezone": "Asia/Kolkata",
-        "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat"
+        ]
       }
     },
     "web": {
@@ -128,7 +145,8 @@
         "analyze_image",
         "collect_product_review",
         "get_bulk_pricing",
-        "request_quote"
+        "request_quote",
+        "get_order_invoice"
       ],
       "maxTurnsBeforeEscalation": 15,
       "streamingEnabled": true,
@@ -136,7 +154,14 @@
         "start": "09:00",
         "end": "21:00",
         "timezone": "Asia/Kolkata",
-        "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri",
+          "Sat"
+        ]
       }
     }
   },
@@ -193,49 +218,100 @@
       "supervisor_request"
     ],
     "sentimentEscalationThreshold": -0.7,
-    "urgencyAutoEscalate": ["critical"],
-    "riskFlagAutoEscalate": ["legal_threat", "social_media_threat", "policy_exception_requested", "repeat_complaint"]
+    "urgencyAutoEscalate": [
+      "critical"
+    ],
+    "riskFlagAutoEscalate": [
+      "legal_threat",
+      "social_media_threat",
+      "policy_exception_requested",
+      "repeat_complaint"
+    ]
   },
   "escalationDesks": {
     "operations": {
       "name": "Operations Desk",
-      "handles": ["urgent_dispatch", "partial_dispatch", "order_replacement", "cod_conversion", "reorder"]
+      "handles": [
+        "urgent_dispatch",
+        "partial_dispatch",
+        "order_replacement",
+        "cod_conversion",
+        "reorder"
+      ]
     },
     "purchase": {
       "name": "Purchase Desk",
-      "handles": ["out_of_stock_confirmed", "product_availability"]
+      "handles": [
+        "out_of_stock_confirmed",
+        "product_availability"
+      ]
     },
     "logistics": {
       "name": "Logistics Desk",
-      "handles": ["edd_breached", "reverse_pickup", "delivery_complaint", "extra_payment", "pod_request", "rto_issue"]
+      "handles": [
+        "edd_breached",
+        "reverse_pickup",
+        "delivery_complaint",
+        "extra_payment",
+        "pod_request",
+        "rto_issue"
+      ]
     },
     "payment": {
       "name": "Payment Desk",
-      "handles": ["payment_link", "refund_processing", "failed_payment", "refund_mismatch"]
+      "handles": [
+        "payment_link",
+        "refund_processing",
+        "failed_payment",
+        "refund_mismatch"
+      ]
     },
     "in_house": {
       "name": "In-House Escalation Team",
-      "handles": ["cancellation", "address_change", "non_returnable_exception", "complex_cases"]
+      "handles": [
+        "cancellation",
+        "address_change",
+        "non_returnable_exception",
+        "complex_cases"
+      ]
     },
     "product_specialist": {
       "name": "Product Specialist Team",
-      "handles": ["warranty_claim", "product_troubleshoot", "repair_assessment", "rvp_arrangement"]
+      "handles": [
+        "warranty_claim",
+        "product_troubleshoot",
+        "repair_assessment",
+        "rvp_arrangement"
+      ]
     },
     "tech": {
       "name": "Tech Team",
-      "handles": ["app_crash", "website_issue", "functional_issue"]
+      "handles": [
+        "app_crash",
+        "website_issue",
+        "functional_issue"
+      ]
     },
     "returns": {
       "name": "Returns Team",
-      "handles": ["late_return_exception", "return_rejection_dispute"]
+      "handles": [
+        "late_return_exception",
+        "return_rejection_dispute"
+      ]
     },
     "sales": {
       "name": "Sales Team",
-      "handles": ["bulk_quote", "institutional_pricing"]
+      "handles": [
+        "bulk_quote",
+        "institutional_pricing"
+      ]
     },
     "quality": {
       "name": "Quality Team",
-      "handles": ["callback_sla_breach", "service_quality"]
+      "handles": [
+        "callback_sla_breach",
+        "service_quality"
+      ]
     }
   },
   "ticketCreationPolicy": {
@@ -308,7 +384,8 @@
     "feature.customer_not_responding": true,
     "feature.wrong_return_reason_correction": true,
     "feature.membership_handling": true,
-    "feature.membership_upsell": true
+    "feature.membership_upsell": true,
+    "tool.get_order_invoice": true
   },
   "customerNotRespondingPolicy": {
     "timeoutMinutes": 15,

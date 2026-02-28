@@ -13,7 +13,7 @@ import { logger } from '../observability/logger';
 import { Channel, StructuredMemory } from '../config/types';
 
 /** Tools that support template-based fast-path responses (skip second LLM call) */
-const FAST_PATH_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment', 'check_return_status']);
+const FAST_PATH_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment', 'check_return_status', 'get_order_invoice']);
 
 interface TestChatBody {
   message: string;

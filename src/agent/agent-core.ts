@@ -431,6 +431,7 @@ export class AgentCore {
           if (items.length > 0) {
             parts.push(`  Items: ${items.map((i) => `${i.name} x${i.shippedQty}`).join(', ')}`);
           }
+          if (s.invoiceUrl) parts.push(`  📄 Invoice: ${s.invoiceUrl}`);
         }
       }
       else if (tr.tool === 'get_shipment_details' && !data.found) {
@@ -470,6 +471,17 @@ export class AgentCore {
       else if (tr.tool === 'check_return_status' && !data.found) {
         detectedIntent = 'return_status';
         parts.push(String(data.message ?? 'No return information found.'));
+      }
+
+      // ── get_order_invoice ──
+      else if (tr.tool === 'get_order_invoice' && data.found && data.invoiceUrl) {
+        detectedIntent = 'invoice_download';
+        parts.push(`📄 Invoice for order ${data.orderNo}:`);
+        parts.push(`Download your invoice here: ${data.invoiceUrl}`);
+      }
+      else if (tr.tool === 'get_order_invoice' && !data.found) {
+        detectedIntent = 'invoice_download';
+        parts.push(String(data.message ?? 'No invoice available for this order.'));
       }
 
       // ── start_ar_demo ──

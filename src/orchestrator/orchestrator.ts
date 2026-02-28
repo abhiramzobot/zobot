@@ -44,7 +44,7 @@ import { getOrderByNumber } from '../cache/order-index';
 import { ToolResult } from '../tools/types';
 
 /** Tools that support template-based fast-path responses (skip second LLM call) */
-const FAST_PATH_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment', 'check_return_status']);
+const FAST_PATH_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment', 'check_return_status', 'get_order_invoice']);
 
 /** Tools that trigger progress messages */
 const PROGRESS_MSG_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment']);

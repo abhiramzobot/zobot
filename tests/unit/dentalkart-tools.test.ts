@@ -26,6 +26,9 @@ jest.mock('../../src/config/env', () => ({
     dentalkartSearch: {
       baseUrl: 'https://mock.search.dentalkart.com/api/v1',
     },
+    dentalkartInvoice: {
+      baseUrl: 'https://mock.apis.dentalkart.com/node_svlss/api/v1/customer-orders/shipment-invoice',
+    },
   },
 }));
 
@@ -421,6 +424,7 @@ describe('Dentalkart Tools', () => {
     });
 
     it('should return shipment details on success', async () => {
+      // First call: VineRetail shipment API
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
@@ -442,12 +446,20 @@ describe('Dentalkart Tools', () => {
           ],
         }),
       });
+      // Second call: Invoice API (auto-fetch for each shipment AWB)
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ pdf_link: 'https://example.com/invoice.pdf', is_error: false }),
+      });
 
       const result = await getShipmentDetailsTool.handler({ order_no: 'Q2593VU' }, ctx);
       expect(result.success).toBe(true);
       const data = result.data as Record<string, unknown>;
       expect(data.found).toBe(true);
       expect(data.shipmentCount).toBe(1);
+      // Verify invoice URL is auto-included
+      const shipments = data.shipments as Array<Record<string, unknown>>;
+      expect(shipments[0].invoiceUrl).toBe('https://example.com/invoice.pdf');
     });
 
     it('should handle empty shipment details', async () => {

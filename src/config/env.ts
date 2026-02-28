@@ -120,6 +120,10 @@ export const env = {
     apiKey: optional('DENTALKART_ADMIN_API_KEY', ''),
   },
 
+  dentalkartInvoice: {
+    baseUrl: optional('DENTALKART_INVOICE_API_URL', 'https://apis.dentalkart.com/node_svlss/api/v1/customer-orders/shipment-invoice'),
+  },
+
   dentalkartSearch: {
     baseUrl: optional('DENTALKART_SEARCH_BASE_URL', 'https://search-staging.dentalkart.com/api/v1'),
   },
