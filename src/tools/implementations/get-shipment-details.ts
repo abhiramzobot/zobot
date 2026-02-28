@@ -67,6 +67,35 @@ function parseTransporter(raw: string): { cpId: string; carrierName: string } {
 }
 
 /**
+ * Parse a VineRetail date string (dd/MM/yyyy or dd/MM/yyyy HH:mm:ss) to a Date.
+ * Returns null if parsing fails.
+ */
+function parseVineRetailDate(raw: unknown): Date | null {
+  if (!raw || typeof raw !== 'string') return null;
+  const dateOnly = raw.includes(' ') ? raw.split(' ')[0] : raw;
+  const parts = dateOnly.split('/');
+  if (parts.length !== 3) return null;
+  const [dd, mm, yyyy] = parts;
+  const d = new Date(`${yyyy}-${mm}-${dd}T00:00:00`);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+/**
+ * Calculate the return window status for a delivered shipment.
+ * Returns: { eligible, daysRemaining, deliveredDaysAgo } or null if not delivered.
+ */
+function calcReturnWindow(deliveredDate: unknown, windowDays = 10): { eligible: boolean; daysRemaining: number; deliveredDaysAgo: number } | null {
+  const delivered = parseVineRetailDate(deliveredDate);
+  if (!delivered) return null;
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const diffMs = now.getTime() - delivered.getTime();
+  const daysAgo = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const remaining = windowDays - daysAgo;
+  return { eligible: remaining > 0, daysRemaining: Math.max(0, remaining), deliveredDaysAgo: daysAgo };
+}
+
+/**
  * Parse EDD string from udf fields.
  * Input: "EDD Dispatch: 24/10/2024 18:00" or "EDD Delivery: 27/10/2024 23:59"
  * Returns the date portion, or null.
@@ -183,6 +212,9 @@ const handler: ToolHandler = async (args, ctx) => {
           }
         : undefined;
 
+      // Calculate return window if delivered
+      const returnWindow = calcReturnWindow(ship.delivereddate);
+
       return {
         trackingNumber: ship.tracking_number ?? '',
         cpId,
@@ -195,6 +227,12 @@ const handler: ToolHandler = async (args, ctx) => {
         items,
         dimensions,
         itemCount: items.length,
+        // Pre-computed return window — prevents LLM from miscalculating dates
+        ...(returnWindow && {
+          returnEligible: returnWindow.eligible,
+          returnDaysRemaining: returnWindow.daysRemaining,
+          deliveredDaysAgo: returnWindow.deliveredDaysAgo,
+        }),
       };
     });
 

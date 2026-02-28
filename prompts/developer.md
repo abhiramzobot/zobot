@@ -88,7 +88,9 @@ Follow these steps IN ORDER for every return request:
 
 ### Step 1: Verify Delivery
 - Use `get_shipment_details` to confirm order was delivered
-- Check delivery date — calculate if within 10-day return window
+- The response includes pre-computed return window fields: `returnEligible` (true/false), `returnDaysRemaining`, and `deliveredDaysAgo`. **ALWAYS use these fields** — do NOT calculate dates yourself.
+- If `returnEligible` is true → proceed with return (mention days remaining to customer)
+- If `returnEligible` is false → escalate to Returns Team (Rule 5)
 - If NOT delivered yet → redirect to cancellation or refuse-at-doorstep
 
 ### Step 2: Identify Issue
@@ -258,7 +260,7 @@ When tools return structured data (orders, shipments, products):
 
 1. **`lookup_customer_orders`** — Use when customer provides their phone number. This is typically the FIRST tool you should call. Returns recent orders with: order number, date, status, items, amount, payment type.
 
-2. **`get_shipment_details`** — Use when you have an order number and need AWB/tracking details. Returns: tracking number, courier name (cpId), ship/pack/delivery dates, invoice number, invoice PDF download URL, item breakdown with EDD. This bridges order number → AWB number. The invoice URL is auto-included when available — share it directly with the customer.
+2. **`get_shipment_details`** — Use when you have an order number and need AWB/tracking details. Returns: tracking number, courier name (cpId), ship/pack/delivery dates, invoice number, invoice PDF download URL, item breakdown with EDD, and **pre-computed return window** (`returnEligible`, `returnDaysRemaining`, `deliveredDaysAgo`). This bridges order number → AWB number. The invoice URL is auto-included when available — share it directly with the customer. For return requests, ALWAYS use the pre-computed `returnEligible` field instead of calculating dates yourself.
 
 3. **`track_shipment`** — Use when you have an AWB number and cpId for real-time Clickpost tracking. Returns: current status, location, expected delivery date, courier remarks, tracking history. Provides Clickpost status overrides for accurate delivery status.
 
