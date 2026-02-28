@@ -43,6 +43,20 @@ jest.mock('../../src/observability/logger', () => ({
   },
 }));
 
+// Mock cache-service for order_no lookup tests
+const mockGetCacheStore = jest.fn().mockReturnValue(null);
+jest.mock('../../src/cache/cache-service', () => ({
+  getCacheStore: () => mockGetCacheStore(),
+}));
+
+// Mock order-index
+const mockGetOrderByNumber = jest.fn().mockResolvedValue(null);
+const mockIndexOrdersByNumber = jest.fn().mockResolvedValue(undefined);
+jest.mock('../../src/cache/order-index', () => ({
+  getOrderByNumber: (...args: unknown[]) => mockGetOrderByNumber(...args),
+  indexOrdersByNumber: (...args: unknown[]) => mockIndexOrdersByNumber(...args),
+}));
+
 import { lookupCustomerOrdersTool } from '../../src/tools/implementations/lookup-customer-orders';
 import { trackShipmentTool } from '../../src/tools/implementations/track-shipment';
 import { getShipmentDetailsTool } from '../../src/tools/implementations/get-shipment-details';
@@ -69,9 +83,13 @@ describe('Dentalkart Tools', () => {
   describe('lookup_customer_orders', () => {
     it('should have correct metadata', () => {
       expect(lookupCustomerOrdersTool.name).toBe('lookup_customer_orders');
-      expect(lookupCustomerOrdersTool.version).toBe('1.1.0');
+      expect(lookupCustomerOrdersTool.version).toBe('1.2.0');
       expect(lookupCustomerOrdersTool.authLevel).toBe('service');
-      expect(lookupCustomerOrdersTool.inputSchema.required).toContain('phone');
+      // phone and order_no are both optional now (either can be provided)
+      expect(lookupCustomerOrdersTool.inputSchema.required).toEqual([]);
+      expect(lookupCustomerOrdersTool.inputSchema.properties).toHaveProperty('order_no');
+      expect(lookupCustomerOrdersTool.cacheable).toBe(true);
+      expect(lookupCustomerOrdersTool.cacheTtlSeconds).toBe(180);
     });
 
     it('should reject invalid phone numbers', async () => {
@@ -114,7 +132,8 @@ describe('Dentalkart Tools', () => {
       const order = (data.orders as Array<Record<string, unknown>>)[0];
       // orderNo should be the CUSTOMER-FACING number, not internal M0XXXXXXXX
       expect(order.orderNo).toBe('Q2593VU');
-      expect(order._internalId).toBe('M022338958');
+      // _internalId is no longer exposed to prevent LLM from using it in downstream tools
+      expect(order._internalId).toBeUndefined();
     });
 
     it('should handle empty order list', async () => {
@@ -218,6 +237,98 @@ describe('Dentalkart Tools', () => {
       const callBody = mockFetch.mock.calls[0][1].body;
       // 09876543210 → 11 digits starting with 0 → normalized to 9876543210
       expect(callBody).toContain('9876543210');
+    });
+
+    // ── order_no parameter tests ──
+
+    it('should return cached order when order_no matches Redis index', async () => {
+      const cachedOrder = {
+        orderNo: 'Q2593VU',
+        status: 'Delivered',
+        customerName: 'Dr. Test',
+        _sourcePhone: '98****10',
+      };
+      const mockCache = { get: jest.fn(), set: jest.fn(), del: jest.fn(), has: jest.fn(), clear: jest.fn(), stats: jest.fn() };
+      mockGetCacheStore.mockReturnValue(mockCache);
+      mockGetOrderByNumber.mockResolvedValueOnce(cachedOrder);
+
+      const result = await lookupCustomerOrdersTool.handler({ order_no: 'Q2593VU' }, ctx);
+
+      expect(result.success).toBe(true);
+      const data = result.data as Record<string, unknown>;
+      expect(data.found).toBe(true);
+      expect(data.orderCount).toBe(1);
+      expect(data._fromCache).toBe(true);
+      expect((data.orders as any[])[0].orderNo).toBe('Q2593VU');
+      // Should NOT call fetch
+      expect(mockFetch).not.toHaveBeenCalled();
+
+      mockGetCacheStore.mockReturnValue(null);
+    });
+
+    it('should fall back to phone lookup when order_no is not in cache', async () => {
+      const mockCache = { get: jest.fn(), set: jest.fn(), del: jest.fn(), has: jest.fn(), clear: jest.fn(), stats: jest.fn() };
+      mockGetCacheStore.mockReturnValue(mockCache);
+      mockGetOrderByNumber.mockResolvedValueOnce(null);
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          orderList: [{
+            'M022338958': {
+              orderNo: 'M022338958',
+              extOrderNo: 'Q2593VU',
+              status: 'Delivered',
+              orderDate: '2025-01-15',
+              orderAmount: 5500,
+              customerName: 'Dr. Test',
+              items: [],
+            },
+          }],
+        }),
+      });
+
+      const result = await lookupCustomerOrdersTool.handler(
+        { order_no: 'Q2593VU', phone: '9876543210' },
+        ctx,
+      );
+
+      expect(result.success).toBe(true);
+      const data = result.data as Record<string, unknown>;
+      expect(data.found).toBe(true);
+      // Should have called fetch for phone lookup
+      expect(mockFetch).toHaveBeenCalled();
+
+      mockGetCacheStore.mockReturnValue(null);
+    });
+
+    it('should return error when order_no misses cache and no phone provided', async () => {
+      const mockCache = { get: jest.fn(), set: jest.fn(), del: jest.fn(), has: jest.fn(), clear: jest.fn(), stats: jest.fn() };
+      mockGetCacheStore.mockReturnValue(mockCache);
+      mockGetOrderByNumber.mockResolvedValueOnce(null);
+
+      const result = await lookupCustomerOrdersTool.handler({ order_no: 'Q2593VU' }, ctx);
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Q2593VU');
+      expect(result.error).toContain('phone number');
+
+      mockGetCacheStore.mockReturnValue(null);
+    });
+
+    it('should handle cache read failure gracefully for order_no', async () => {
+      const mockCache = { get: jest.fn(), set: jest.fn(), del: jest.fn(), has: jest.fn(), clear: jest.fn(), stats: jest.fn() };
+      mockGetCacheStore.mockReturnValue(mockCache);
+      mockGetOrderByNumber.mockRejectedValueOnce(new Error('Redis down'));
+
+      // Should fall through to phone validation
+      const result = await lookupCustomerOrdersTool.handler({ order_no: 'Q2593VU' }, ctx);
+
+      expect(result.success).toBe(false);
+      // Falls through to phone validation which fails since no phone provided
+      expect(result.error).toContain('phone number');
+
+      mockGetCacheStore.mockReturnValue(null);
     });
   });
 

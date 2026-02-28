@@ -154,14 +154,24 @@ class InMemoryCacheStore implements CacheStore {
   }
 }
 
-// ───── Factory ──────────────────────────────────────────────────
+// ───── Factory & Singleton ───────────────────────────────────────
+
+/** Singleton instance for global access from tool handlers */
+let _cacheStoreInstance: CacheStore | undefined;
 
 export function createCacheStore(redis?: Redis, config?: Partial<CacheConfig>): CacheStore {
   const merged = { ...DEFAULT_CONFIG, ...config };
   if (redis) {
     logger.info('Cache store: Redis-backed');
-    return new RedisCacheStore(redis, merged);
+    _cacheStoreInstance = new RedisCacheStore(redis, merged);
+  } else {
+    logger.info('Cache store: In-memory');
+    _cacheStoreInstance = new InMemoryCacheStore(merged);
   }
-  logger.info('Cache store: In-memory');
-  return new InMemoryCacheStore(merged);
+  return _cacheStoreInstance;
+}
+
+/** Get the app-wide cache store instance (available after createCacheStore is called) */
+export function getCacheStore(): CacheStore | undefined {
+  return _cacheStoreInstance;
 }

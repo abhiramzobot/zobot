@@ -38,6 +38,16 @@ import { formatRichMedia } from '../channels/rich-media-formatter';
 import { SkillRouter } from '../routing/skill-router';
 import { getStaticFallback } from '../resilience/static-fallbacks';
 import { getDependencyHealth } from '../resilience/dependency-health';
+// ───── Order pre-fetch & fast-path ─────
+import { getCacheStore } from '../cache/cache-service';
+import { getOrderByNumber } from '../cache/order-index';
+import { ToolResult } from '../tools/types';
+
+/** Tools that support template-based fast-path responses (skip second LLM call) */
+const FAST_PATH_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment', 'check_return_status']);
+
+/** Tools that trigger progress messages */
+const PROGRESS_MSG_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment']);
 
 /** Terminal states where learning data should be collected */
 const TERMINAL_STATES = new Set(['RESOLVED', 'ESCALATED']);
@@ -258,6 +268,55 @@ export class Orchestrator {
         }
       }
 
+      // 5f. Pre-fetch: start order lookups in parallel with LLM call
+      // VOC already extracted phone/order entities — start API calls now so data is ready
+      // when the LLM returns tool calls
+      const prefetchResults = new Map<string, Promise<ToolResult>>();
+      if (vocResult) {
+        const cacheStore = getCacheStore();
+        const prefetchToolCtx: ToolContext = {
+          tenantId: inbound.tenantId,
+          channel: inbound.channel,
+          conversationId: inbound.conversationId,
+          visitorId: inbound.visitorId,
+          requestId: trace.requestId,
+        };
+
+        for (const entity of vocResult.entities) {
+          // Pre-fetch order by number from Redis index (fast, ~5ms)
+          if (entity.type === 'order_number' && cacheStore) {
+            const orderNo = entity.value.toUpperCase();
+            prefetchResults.set(`order_no:${orderNo}`, getOrderByNumber(cacheStore, orderNo).then((cached) => {
+              if (cached) {
+                log.info({ orderNo, source: 'prefetch' }, 'Prefetch: order found in index');
+                return {
+                  success: true,
+                  data: {
+                    found: true,
+                    phone: cached._sourcePhone ?? '',
+                    customerName: cached.customerName ?? 'Unknown',
+                    totalOrders: 1, totalPages: 1, currentPage: 1, orderCount: 1,
+                    orders: [cached],
+                    _fromCache: true,
+                  },
+                } as ToolResult;
+              }
+              return { success: false, error: 'not_in_cache' } as ToolResult;
+            }).catch(() => ({ success: false, error: 'prefetch_failed' } as ToolResult)));
+          }
+
+          // Pre-fetch orders by phone (starts actual VineRetail API call)
+          if (entity.type === 'phone' && entity.confidence >= 0.9) {
+            const phone = entity.value;
+            prefetchResults.set(`phone:${phone}`, toolRuntime.execute(
+              'lookup_customer_orders',
+              { phone },
+              prefetchToolCtx,
+            ).catch(() => ({ success: false, error: 'prefetch_failed' } as ToolResult)));
+          }
+        }
+      }
+
       // 6. Call agent core (routed through ModelRouter with automatic failover)
       const spanAgent = startSpan(trace, 'agent.process');
       const tenantConfig = configService.get(inbound.tenantId);
@@ -375,7 +434,7 @@ export class Orchestrator {
       );
       record.state = newState;
 
-      // 9. Execute tool calls through the runtime
+      // 9. Execute tool calls through the runtime (parallel where possible)
       const spanTools = startSpan(trace, 'tools.execute');
       const toolCtx: ToolContext = {
         tenantId: inbound.tenantId,
@@ -385,72 +444,146 @@ export class Orchestrator {
         requestId: trace.requestId,
       };
 
-      const toolResults: Array<{ tool: string; success: boolean; data?: unknown; error?: string }> = [];
+      // Send progress message for long-running lookups (fire-and-forget)
+      if (agentResponse.toolCalls.some((tc) => PROGRESS_MSG_TOOLS.has(tc.name))) {
+        this.outbound.sendMessage(
+          inbound.conversationId,
+          'Looking up your order details...',
+          inbound.channel,
+        ).catch(() => {});
+      }
 
-      for (const toolCall of agentResponse.toolCalls) {
+      // Execute all tool calls in parallel
+      const toolPromises = agentResponse.toolCalls.map(async (toolCall) => {
         try {
-          const result = await toolRuntime.execute(toolCall.name, toolCall.args, toolCtx);
-          log.info({ tool: toolCall.name, success: result.success }, 'Tool executed');
-
-          toolResults.push({
-            tool: toolCall.name,
-            success: result.success,
-            data: result.data,
-            error: result.error,
-          });
-
-          // If handoff was called, mark escalated with enriched VOC context
-          if (toolCall.name === 'handoff_to_human' && result.success) {
-            record.state = 'ESCALATED';
-            // Build enriched summary with VOC intelligence
-            const vocSummaryParts: string[] = [String(toolCall.args.summary ?? '')];
-            if (vocResult) {
-              if (vocResult.urgency.level !== 'low') {
-                vocSummaryParts.push(`Urgency: ${vocResult.urgency.level} (${vocResult.urgency.signals.join(', ')})`);
-              }
-              if (vocResult.riskFlags.length > 0) {
-                vocSummaryParts.push(`Risk Flags: ${vocResult.riskFlags.map((f) => f.type).join(', ')}`);
-              }
-              if (vocResult.detectedLanguages[0]?.code !== 'en') {
-                vocSummaryParts.push(`Language: ${vocResult.detectedLanguages[0]?.code}`);
+          // Check if prefetch already has the result for this tool call
+          let result: ToolResult | undefined;
+          if (toolCall.name === 'lookup_customer_orders') {
+            const orderNoArg = String(toolCall.args.order_no ?? '').toUpperCase();
+            const phoneArg = String(toolCall.args.phone ?? '');
+            if (orderNoArg && prefetchResults.has(`order_no:${orderNoArg}`)) {
+              const prefetched = await prefetchResults.get(`order_no:${orderNoArg}`)!;
+              if (prefetched.success) {
+                log.info({ tool: toolCall.name, source: 'prefetch' }, 'Using prefetched result');
+                result = prefetched;
               }
             }
-            if (agentResponse.sentiment) {
-              vocSummaryParts.push(`Sentiment: ${agentResponse.sentiment.label} (${agentResponse.sentiment.score})`);
-            }
-            if (agentResponse.customerStage) {
-              vocSummaryParts.push(`Stage: ${agentResponse.customerStage}`);
-            }
-            vocSummaryParts.push(`Turns: ${record.turnCount}`);
-
-            try {
-              await this.outbound.escalateToHuman(
-                inbound.conversationId,
-                String(toolCall.args.reason ?? 'Escalated'),
-                vocSummaryParts.filter(Boolean).join(' | '),
-                inbound.channel,
-              );
-            } catch (err) {
-              log.error({ err }, 'Failed to escalate via outbound adapter');
+            if (!result && phoneArg && prefetchResults.has(`phone:${phoneArg}`)) {
+              const prefetched = await prefetchResults.get(`phone:${phoneArg}`)!;
+              if (prefetched.success) {
+                log.info({ tool: toolCall.name, source: 'prefetch' }, 'Using prefetched result');
+                result = prefetched;
+              }
             }
           }
+
+          if (!result) {
+            result = await toolRuntime.execute(toolCall.name, toolCall.args, toolCtx);
+          }
+
+          log.info({ tool: toolCall.name, success: result.success }, 'Tool executed');
+          return { tool: toolCall.name, success: result.success, data: result.data, error: result.error, args: toolCall.args };
         } catch (err) {
           log.error({ err, tool: toolCall.name }, 'Tool execution error');
-          toolResults.push({
-            tool: toolCall.name,
-            success: false,
-            error: String(err),
-          });
+          return { tool: toolCall.name, success: false, error: String(err), args: toolCall.args };
+        }
+      });
+
+      const toolResults = await Promise.all(toolPromises);
+
+      // Post-process: handle handoff_to_human escalation
+      for (const tr of toolResults) {
+        if (tr.tool === 'handoff_to_human' && tr.success) {
+          record.state = 'ESCALATED';
+          const vocSummaryParts: string[] = [String((tr as any).args?.summary ?? '')];
+          if (vocResult) {
+            if (vocResult.urgency.level !== 'low') {
+              vocSummaryParts.push(`Urgency: ${vocResult.urgency.level} (${vocResult.urgency.signals.join(', ')})`);
+            }
+            if (vocResult.riskFlags.length > 0) {
+              vocSummaryParts.push(`Risk Flags: ${vocResult.riskFlags.map((f) => f.type).join(', ')}`);
+            }
+            if (vocResult.detectedLanguages[0]?.code !== 'en') {
+              vocSummaryParts.push(`Language: ${vocResult.detectedLanguages[0]?.code}`);
+            }
+          }
+          if (agentResponse.sentiment) {
+            vocSummaryParts.push(`Sentiment: ${agentResponse.sentiment.label} (${agentResponse.sentiment.score})`);
+          }
+          if (agentResponse.customerStage) {
+            vocSummaryParts.push(`Stage: ${agentResponse.customerStage}`);
+          }
+          vocSummaryParts.push(`Turns: ${record.turnCount}`);
+
+          try {
+            await this.outbound.escalateToHuman(
+              inbound.conversationId,
+              String((tr as any).args?.reason ?? 'Escalated'),
+              vocSummaryParts.filter(Boolean).join(' | '),
+              inbound.channel,
+            );
+          } catch (err) {
+            log.error({ err }, 'Failed to escalate via outbound adapter');
+          }
         }
       }
       endSpan(spanTools);
 
+      // 9a. Populate structured memory with order data from tool results
+      for (const tr of toolResults) {
+        if (tr.tool === 'lookup_customer_orders' && tr.success && tr.data) {
+          const data = tr.data as Record<string, unknown>;
+          if (data.found && Array.isArray(data.orders)) {
+            const orders = data.orders as Array<Record<string, unknown>>;
+            const orderDataCache = record.structuredMemory.orderDataCache ?? {};
+            const orderNumbers = new Set(record.structuredMemory.orderNumbers ?? []);
+
+            for (const order of orders) {
+              const oNo = String(order.orderNo ?? '');
+              if (!oNo) continue;
+              orderNumbers.add(oNo);
+
+              const items = Array.isArray(order.items) ? order.items as Array<Record<string, unknown>> : [];
+              orderDataCache[oNo] = {
+                orderNo: oNo,
+                status: String(order.status ?? 'Unknown'),
+                orderDate: order.orderDate,
+                totalAmount: order.totalAmount,
+                paymentMethod: order.paymentMethod,
+                itemCount: items.length,
+                itemSummary: items.map((i) => `${i.name} x${i.qty}`).join(', '),
+                cachedAt: Date.now(),
+              };
+            }
+
+            record.structuredMemory.orderNumbers = [...orderNumbers];
+            record.structuredMemory.orderDataCache = orderDataCache;
+            record.structuredMemory.lastOrderStatus = String(orders[0]?.status ?? '');
+          }
+        }
+      }
+
       // 9b. TOOL RESULT FEEDBACK LOOP
-      // Feed tool results (successes AND failures) back to the LLM so it can:
-      // - Present actual data (orders, tracking, etc.) from successful tools
-      // - Correct its message when tools fail (e.g. don't promise an AR link if Lens is down)
+      // Fast-path: if all tool results are for supported tools and all succeeded,
+      // use template-based formatting and skip the second LLM call (~2-3s savings)
       const hasToolResults = toolResults.length > 0;
-      if (hasToolResults && agentResponse.toolCalls.length > 0) {
+      const canUseFastPath = hasToolResults
+        && toolResults.every((tr) => tr.success && FAST_PATH_TOOLS.has(tr.tool));
+
+      if (canUseFastPath) {
+        try {
+          const fallback = (this.agent as any).buildToolResultsFallback?.(toolResults);
+          if (fallback?.userFacingMessage) {
+            log.info({ toolCount: toolResults.length }, 'Fast-path: using template response (skipping second LLM call)');
+            agentResponse.userFacingMessage = fallback.userFacingMessage;
+            if (fallback.intent) agentResponse.intent = fallback.intent;
+          }
+        } catch {
+          // Fast-path failed — fall through to standard LLM refinement below
+        }
+      }
+
+      if (hasToolResults && agentResponse.toolCalls.length > 0 && !canUseFastPath) {
         const spanRefine = startSpan(trace, 'agent.refineWithToolResults');
         try {
           log.info({ toolCount: toolResults.length }, 'Feeding tool results back to LLM');

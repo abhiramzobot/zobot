@@ -162,6 +162,18 @@ export interface ConversationTurn {
   }>;
 }
 
+/** Lightweight order snapshot stored in conversation memory */
+export interface OrderDataSnapshot {
+  orderNo: string;
+  status: string;
+  orderDate: unknown;
+  totalAmount: unknown;
+  paymentMethod: unknown;
+  itemCount: number;
+  itemSummary: string;
+  cachedAt: number;
+}
+
 /** Structured memory (extracted facts) */
 export interface StructuredMemory {
   name?: string;
@@ -174,6 +186,8 @@ export interface StructuredMemory {
   orderNumbers?: string[];
   awbNumbers?: string[];
   lastOrderStatus?: string;
+  /** Cached order data from last lookup (conversation-scoped) */
+  orderDataCache?: Record<string, OrderDataSnapshot>;
   issueCategory?: string;   // L1 classification: Order Status, Modify/Cancel, Return/Replace, etc.
   issueSubCategory?: string; // L2/L3 classification
   customFields: Record<string, unknown>;

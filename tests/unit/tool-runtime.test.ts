@@ -59,11 +59,14 @@ describe('ToolRuntime', () => {
       (configService.isToolEnabled as jest.Mock).mockRestore();
     });
 
-    it('should reject invalid input for lookup_customer_orders (missing phone)', async () => {
+    it('should accept lookup_customer_orders with no required args (phone and order_no are optional)', async () => {
       jest.spyOn(configService, 'isToolEnabled').mockReturnValue(true);
+      // With required: [], empty args should pass schema validation
+      // (handler-level validation will still reject if neither phone nor order_no is provided)
       const result = await runtime.execute('lookup_customer_orders', {}, ctx);
-      expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid input');
+      // Should reach the handler (not fail at schema validation)
+      // The handler will return an error about needing a phone number
+      expect(result.error).not.toContain('Invalid input');
       (configService.isToolEnabled as jest.Mock).mockRestore();
     });
 

@@ -12,6 +12,8 @@ import { getDependencyHealth } from '../resilience/dependency-health';
 import { getAuditService } from '../audit/audit-service';
 // ───── Enhancement v5: Feedback Collector ─────
 import { FeedbackCollector } from '../copilot/feedback-collector';
+// ───── In-flight request deduplication ─────
+import { deduplicatedExecute } from './inflight-dedup';
 
 const ajv = new Ajv({ allErrors: true, coerceTypes: true });
 
@@ -19,6 +21,22 @@ const ajv = new Ajv({ allErrors: true, coerceTypes: true });
 const toolRateCounters: Map<string, { count: number; resetAt: number }> = new Map();
 
 const TOOL_TIMEOUT_MS = 15_000;
+
+/** Shared tool → dependency mapping (used for circuit breaker checks) */
+const TOOL_DEPENDENCY_MAP: Record<string, string> = {
+  lookup_customer_orders: 'oms',
+  get_shipment_details: 'oms',
+  get_ship_details: 'oms',
+  check_return_status: 'oms',
+  track_shipment: 'tracking',
+  initiate_return: 'oms',
+  cancel_order: 'oms',
+  update_address: 'oms',
+  change_payment_method: 'oms',
+  generate_payment_link: 'payment',
+  handoff_to_human: 'ticketing',
+  search_knowledge: 'search',
+};
 
 export class ToolRuntime {
   private cacheStore?: CacheStore;
@@ -98,14 +116,7 @@ export class ToolRuntime {
     // 4b. Dependency health check (Enhancement v2)
     const depHealth = getDependencyHealth();
     if (depHealth) {
-      // Map tool names to dependency names
-      const toolDependencyMap: Record<string, string> = {
-        lookup_order: 'oms', track_shipment: 'tracking', initiate_return: 'oms',
-        cancel_order: 'oms', update_address: 'oms', change_payment_method: 'oms',
-        generate_payment_link: 'payment', handoff_to_human: 'ticketing',
-        search_knowledge: 'search',
-      };
-      const depName = toolDependencyMap[toolName];
+      const depName = TOOL_DEPENDENCY_MAP[toolName];
       if (depName && !depHealth.isAvailable(depName as any)) {
         log.warn({ dependency: depName }, 'Dependency unavailable, tool blocked');
         return { success: false, error: `Service temporarily unavailable. Please try again shortly.` };
@@ -148,8 +159,9 @@ export class ToolRuntime {
       return { success: false, error: 'Internal validation error' };
     }
 
-    // 6. Execute with timeout + retry
-    let result = await this.tryExecute(tool, args, ctx, log);
+    // 6. Execute with timeout + retry + in-flight deduplication
+    const dedupKey = cacheKey ?? `tool:${toolName}:${createHash('md5').update(JSON.stringify(args)).digest('hex').substring(0, 16)}`;
+    let result = await deduplicatedExecute(dedupKey, () => this.tryExecute(tool, args, ctx, log));
 
     // 6b. Retry once if failed and tool is retryable
     if (!result.success && tool.retryable !== false) {
@@ -162,13 +174,7 @@ export class ToolRuntime {
 
     // 6c. Record dependency health (Enhancement v2)
     if (depHealth) {
-      const toolDependencyMap: Record<string, string> = {
-        lookup_order: 'oms', track_shipment: 'tracking', initiate_return: 'oms',
-        cancel_order: 'oms', update_address: 'oms', change_payment_method: 'oms',
-        generate_payment_link: 'payment', handoff_to_human: 'ticketing',
-        search_knowledge: 'search',
-      };
-      const depName = toolDependencyMap[toolName];
+      const depName = TOOL_DEPENDENCY_MAP[toolName];
       if (depName) {
         if (result.success) depHealth.recordSuccess(depName as any);
         else depHealth.recordFailure(depName as any, result.error ?? 'unknown');

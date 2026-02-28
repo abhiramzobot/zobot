@@ -141,7 +141,7 @@ const handler: ToolHandler = async (args, ctx) => {
         success: true,
         data: {
           found: false,
-          orderNo: matchedOrder.orderNo ?? orderNo,
+          orderNo,
           message: `Order ${orderNo} exists but has no shipment details yet. It may still be processing.`,
         },
       };
@@ -208,7 +208,8 @@ const handler: ToolHandler = async (args, ctx) => {
       success: true,
       data: {
         found: true,
-        orderNo: matchedOrder.orderNo ?? orderNo,
+        orderNo,
+        _internalOrderNo: matchedOrder.orderNo ?? orderNo,
         shipmentCount: shipments.length,
         shipments,
       },
@@ -252,5 +253,7 @@ export const getShipmentDetailsTool: ToolDefinition = {
   rateLimitPerMinute: 15,
   allowedChannels: ['whatsapp', 'business_chat', 'web'],
   featureFlagKey: 'tool.get_shipment_details',
+  cacheable: true,
+  cacheTtlSeconds: 300,
   handler,
 };

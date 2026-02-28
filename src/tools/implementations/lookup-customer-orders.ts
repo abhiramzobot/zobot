@@ -1,6 +1,8 @@
 import { ToolDefinition, ToolHandler } from '../types';
 import { env } from '../../config/env';
 import { logger } from '../../observability/logger';
+import { getCacheStore } from '../../cache/cache-service';
+import { indexOrdersByNumber, getOrderByNumber } from '../../cache/order-index';
 
 /**
  * VineRetail Customer Order API
@@ -64,9 +66,47 @@ function normalizeIndianPhone(raw: string): string[] {
 const handler: ToolHandler = async (args, ctx) => {
   const log = logger.child({ tool: 'lookup_customer_orders', conversationId: ctx.conversationId });
 
+  // ── Fast path: direct order-number lookup from Redis index ──
+  const orderNo = String(args.order_no ?? '').trim().toUpperCase();
+  if (orderNo) {
+    const cacheStore = getCacheStore();
+    if (cacheStore) {
+      try {
+        const cachedOrder = await getOrderByNumber(cacheStore, orderNo);
+        if (cachedOrder) {
+          log.info({ orderNo, source: 'order_index' }, 'Order found in number index');
+          return {
+            success: true,
+            data: {
+              found: true,
+              phone: cachedOrder._sourcePhone ?? '',
+              customerName: cachedOrder.customerName ?? 'Unknown',
+              totalOrders: 1,
+              totalPages: 1,
+              currentPage: 1,
+              orderCount: 1,
+              orders: [cachedOrder],
+              _fromCache: true,
+            },
+          };
+        }
+        log.info({ orderNo }, 'Order not in index, falling back to phone lookup');
+      } catch {
+        // Cache read failure — proceed with phone lookup
+      }
+    }
+  }
+
+  // ── Standard phone-based lookup ──
   const rawPhone = String(args.phone ?? '').trim();
   const phoneCandidates = normalizeIndianPhone(rawPhone);
   if (phoneCandidates.length === 0) {
+    if (orderNo) {
+      return {
+        success: false,
+        error: `Order ${orderNo} was not found in the cache. A phone number is needed to look it up from the order system.`,
+      };
+    }
     return {
       success: false,
       error: 'A valid phone number (at least 10 digits) is required to look up orders.',
@@ -146,11 +186,11 @@ const handler: ToolHandler = async (args, ctx) => {
         });
 
         // CRITICAL: orderNo = customer-facing order number (Q2XXXXX format).
-        // The VineRetail internal ID (M0XXXXXXXX) is hidden from customers.
+        // The VineRetail internal ID (M0XXXXXXXX) is NEVER exposed to the LLM or customers
+        // to prevent internal IDs from leaking into downstream tool calls.
         const customerOrderNo = order.extOrderNo || order.masterOrderNo || order.orderNo;
         return {
           orderNo: customerOrderNo,
-          _internalId: order.orderNo,
           status: mapStatus(String(order.status ?? '')),
           rawStatus: order.status,
           orderDate: order.orderDate,
@@ -175,6 +215,12 @@ const handler: ToolHandler = async (args, ctx) => {
           discountAmount: order.discountAmount,
         };
       });
+
+      // Index each order by number in Redis for future direct lookups (fire-and-forget)
+      const cacheStore = getCacheStore();
+      if (cacheStore && orders.length > 0) {
+        indexOrdersByNumber(cacheStore, orders, maskPhone(phone), 180).catch(() => {});
+      }
 
       log.info({
         phone: maskPhone(phone),
@@ -239,15 +285,21 @@ function maskPhone(phone: string): string {
 
 export const lookupCustomerOrdersTool: ToolDefinition = {
   name: 'lookup_customer_orders',
-  version: '1.1.0',
+  version: '1.2.0',
   description:
-    'Look up customer orders from VineRetail by phone number. Returns order details including order number, status, items (with SKU, product name, qty, price), amounts, payment method, and shipping address. Use when customer wants to know about their orders, order status, or order history. Dates are optional — omit them to get all orders.',
+    'Look up customer orders from VineRetail. Can search by phone number OR by order number (e.g. Q2593VU). ' +
+    'If the customer provides an order number, pass it as order_no for fastest lookup. ' +
+    'If only a phone number is available, pass it as phone. Returns order details including status, items, amounts, payment method, and shipping address. Dates are optional.',
   inputSchema: {
     type: 'object',
     properties: {
       phone: {
         type: 'string',
-        description: 'Customer phone number (10+ digits). Remove country code prefix if present.',
+        description: 'Customer phone number (10+ digits). Required unless order_no is provided.',
+      },
+      order_no: {
+        type: 'string',
+        description: 'Customer-facing order number (e.g. "Q2593VU"). If provided, attempts fast cached lookup first.',
       },
       fromDate: {
         type: 'string',
@@ -262,7 +314,7 @@ export const lookupCustomerOrdersTool: ToolDefinition = {
         description: 'Page number for pagination. Defaults to "1".',
       },
     },
-    required: ['phone'],
+    required: [],
     additionalProperties: false,
   },
   outputSchema: {
@@ -283,5 +335,7 @@ export const lookupCustomerOrdersTool: ToolDefinition = {
   rateLimitPerMinute: 15,
   allowedChannels: ['whatsapp', 'business_chat', 'web'],
   featureFlagKey: 'tool.lookup_customer_orders',
+  cacheable: true,
+  cacheTtlSeconds: 180,
   handler,
 };

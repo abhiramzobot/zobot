@@ -1,8 +1,12 @@
 import { buildApp } from './app';
 import { env } from './config/env';
 import { logger } from './observability/logger';
+import { initHttpPooling } from './tools/http-client';
 
 async function main(): Promise<void> {
+  // Enable HTTP connection pooling for all fetch() calls (keep-alive)
+  await initHttpPooling();
+
   const { app, redis, scheduler } = await buildApp();
 
   // Graceful shutdown

@@ -128,6 +128,17 @@ export class AgentCore {
       '--- CURRENT CONTEXT ---',
       `Channel: ${channel}`,
       `Known visitor info: ${JSON.stringify(memory)}`,
+      // Inject cached order summary so LLM can answer follow-ups without re-calling tools
+      ...(memory.orderDataCache && Object.keys(memory.orderDataCache).length > 0
+        ? [
+            '',
+            '--- PREVIOUSLY LOOKED-UP ORDERS ---',
+            ...Object.values(memory.orderDataCache).map(
+              (o) => `${o.orderNo}: ${o.status} | ₹${o.totalAmount} | ${o.itemSummary} | ${o.orderDate}`,
+            ),
+            'Use this data to answer follow-up questions about these orders without calling tools again.',
+          ]
+        : []),
       '',
       knowledgeContext ? `--- KNOWLEDGE BASE ---\n${knowledgeContext}` : '',
       '',
@@ -376,7 +387,7 @@ export class AgentCore {
   /**
    * Build a fallback response from raw tool results when the LLM fails.
    */
-  private buildToolResultsFallback(
+  buildToolResultsFallback(
     toolResults: Array<{ tool: string; success: boolean; data?: unknown; error?: string }>,
   ): AgentResponse {
     const parts: string[] = [];
@@ -384,13 +395,13 @@ export class AgentCore {
 
     for (const tr of toolResults) {
       if (!tr.success) {
-        // Surface the tool's own user-friendly error message
         parts.push(tr.error ?? 'Sorry, I encountered an issue processing your request.');
         continue;
       }
       const data = tr.data as Record<string, unknown> | undefined;
       if (!data) continue;
 
+      // ── lookup_customer_orders ──
       if (tr.tool === 'lookup_customer_orders' && data.found && Array.isArray(data.orders)) {
         detectedIntent = 'order_status';
         const orders = data.orders as Array<Record<string, unknown>>;
@@ -401,12 +412,72 @@ export class AgentCore {
         }
         if (orders.length > 5) parts.push(`...and ${orders.length - 5} more.`);
       }
+      // ── lookup_customer_orders (not found) ──
+      else if (tr.tool === 'lookup_customer_orders' && !data.found) {
+        detectedIntent = 'order_status';
+        parts.push(String(data.message ?? 'No orders found.'));
+      }
 
-      if (tr.tool === 'start_ar_demo' && data.sessionStarted && data.customerJoinUrl) {
+      // ── get_shipment_details ──
+      else if (tr.tool === 'get_shipment_details' && data.found && Array.isArray(data.shipments)) {
+        detectedIntent = 'shipment_details';
+        const shipments = data.shipments as Array<Record<string, unknown>>;
+        parts.push(`Shipment details for order ${data.orderNo}:`);
+        for (const s of shipments) {
+          parts.push(`• AWB: ${s.trackingNumber} | Courier: ${s.carrierName} | Status: ${s.status}`);
+          if (s.shipDate) parts.push(`  Shipped: ${s.shipDate}`);
+          if (s.deliveredDate) parts.push(`  Delivered: ${s.deliveredDate}`);
+          const items = Array.isArray(s.items) ? (s.items as Array<Record<string, unknown>>) : [];
+          if (items.length > 0) {
+            parts.push(`  Items: ${items.map((i) => `${i.name} x${i.shippedQty}`).join(', ')}`);
+          }
+        }
+      }
+      else if (tr.tool === 'get_shipment_details' && !data.found) {
+        detectedIntent = 'shipment_details';
+        parts.push(String(data.message ?? 'No shipment details found.'));
+      }
+
+      // ── track_shipment ──
+      else if (tr.tool === 'track_shipment' && data.found) {
+        detectedIntent = 'track_shipment';
+        parts.push(`Tracking update for AWB ${data.awb ?? ''}:`);
+        parts.push(`Status: ${data.latestStatus ?? data.status ?? 'Unknown'}`);
+        if (data.edd) parts.push(`Expected delivery: ${data.edd}`);
+        if (data.currentLocation) parts.push(`Current location: ${data.currentLocation}`);
+        const scans = Array.isArray(data.scans) ? (data.scans as Array<Record<string, unknown>>) : [];
+        if (scans.length > 0) {
+          parts.push('Recent updates:');
+          for (const scan of scans.slice(0, 3)) {
+            parts.push(`  • ${scan.timestamp} — ${scan.status} — ${scan.location ?? ''}`);
+          }
+        }
+      }
+      else if (tr.tool === 'track_shipment' && !data.found) {
+        detectedIntent = 'track_shipment';
+        parts.push(String(data.message ?? 'No tracking information found.'));
+      }
+
+      // ── check_return_status ──
+      else if (tr.tool === 'check_return_status' && data.found) {
+        detectedIntent = 'return_status';
+        parts.push(`Return status for order ${data.orderNo ?? ''}:`);
+        parts.push(`Return status: ${data.returnStatus ?? data.status ?? 'Unknown'}`);
+        if (data.refundStatus) parts.push(`Refund status: ${data.refundStatus}`);
+        if (data.refundAmount) parts.push(`Refund amount: ₹${data.refundAmount}`);
+        if (data.expectedDate) parts.push(`Expected by: ${data.expectedDate}`);
+      }
+      else if (tr.tool === 'check_return_status' && !data.found) {
+        detectedIntent = 'return_status';
+        parts.push(String(data.message ?? 'No return information found.'));
+      }
+
+      // ── start_ar_demo ──
+      else if (tr.tool === 'start_ar_demo' && data.sessionStarted && data.customerJoinUrl) {
         detectedIntent = 'product_demo_request';
         parts.push(String(data.message ?? 'Your AR demo session is ready.'));
-        parts.push(`\n🔗 Join here: ${data.customerJoinUrl}`);
-        if (data.instructions) parts.push(`\n📋 ${data.instructions}`);
+        parts.push(`\nJoin here: ${data.customerJoinUrl}`);
+        if (data.instructions) parts.push(`\n${data.instructions}`);
       }
     }
 

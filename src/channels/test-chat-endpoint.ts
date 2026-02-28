@@ -12,6 +12,9 @@ import { env } from '../config/env';
 import { logger } from '../observability/logger';
 import { Channel, StructuredMemory } from '../config/types';
 
+/** Tools that support template-based fast-path responses (skip second LLM call) */
+const FAST_PATH_TOOLS = new Set(['lookup_customer_orders', 'get_shipment_details', 'track_shipment', 'check_return_status']);
+
 interface TestChatBody {
   message: string;
   conversation_id?: string;
@@ -109,7 +112,7 @@ export function registerTestChatEndpoint(app: FastifyInstance, store: Conversati
       );
       record.state = newState;
 
-      // 6. Execute tool calls
+      // 6. Execute tool calls (parallel for speed)
       const toolCtx: ToolContext = {
         tenantId,
         channel,
@@ -118,35 +121,51 @@ export function registerTestChatEndpoint(app: FastifyInstance, store: Conversati
         requestId: `test-${Date.now()}`,
       };
 
-      const toolResults: Array<{ tool: string; success: boolean; data?: unknown; error?: string }> = [];
-
-      for (const toolCall of agentResponse.toolCalls) {
-        try {
-          const result = await toolRuntime.execute(toolCall.name, toolCall.args, toolCtx);
-          toolResults.push({
-            tool: toolCall.name,
-            success: result.success,
-            data: result.data,
-            error: result.error,
-          });
-        } catch (err) {
-          toolResults.push({
-            tool: toolCall.name,
-            success: false,
-            error: String(err),
-          });
-        }
-      }
+      const toolResults = await Promise.all(
+        agentResponse.toolCalls.map(async (toolCall) => {
+          try {
+            const result = await toolRuntime.execute(toolCall.name, toolCall.args, toolCtx);
+            return {
+              tool: toolCall.name,
+              success: result.success,
+              data: result.data,
+              error: result.error,
+            };
+          } catch (err) {
+            return {
+              tool: toolCall.name,
+              success: false,
+              error: String(err),
+            };
+          }
+        }),
+      );
 
       // 6b. TOOL RESULT FEEDBACK LOOP
-      // Feed tool results (successes AND failures) back to the LLM so it can
-      // present actual data or correct its message when tools fail.
+      // Fast-path: if all tool results are for supported tools and all succeeded,
+      // use template-based formatting and skip the second LLM call (~5-15s savings)
       let finalBotMessage = agentResponse.userFacingMessage;
       let finalIntent = agentResponse.intent;
       let finalExtractedFields = agentResponse.extractedFields;
 
       const hasToolResults = toolResults.length > 0;
-      if (hasToolResults && agentResponse.toolCalls.length > 0) {
+      const canUseFastPath = hasToolResults
+        && toolResults.every((tr) => tr.success && FAST_PATH_TOOLS.has(tr.tool));
+
+      if (canUseFastPath) {
+        try {
+          const fallback = agent.buildToolResultsFallback(toolResults);
+          if (fallback?.userFacingMessage) {
+            log.info({ toolCount: toolResults.length }, 'Fast-path: using template response (skipping second LLM call)');
+            finalBotMessage = fallback.userFacingMessage;
+            if (fallback.intent) finalIntent = fallback.intent;
+          }
+        } catch {
+          // Fast-path failed — fall through to standard LLM refinement below
+        }
+      }
+
+      if (hasToolResults && agentResponse.toolCalls.length > 0 && !canUseFastPath) {
         log.info({ toolCount: toolResults.length }, 'Feeding tool results back to LLM');
 
         try {
@@ -174,6 +193,13 @@ export function registerTestChatEndpoint(app: FastifyInstance, store: Conversati
           }
         } catch (refinedErr) {
           log.error({ err: refinedErr }, 'Failed to refine response with tool results');
+          // Fallback: use raw tool data presentation
+          try {
+            const fallback = agent.buildToolResultsFallback(toolResults);
+            if (fallback?.userFacingMessage) {
+              finalBotMessage = fallback.userFacingMessage;
+            }
+          } catch { /* keep original message if fallback also fails */ }
         }
       }
 
